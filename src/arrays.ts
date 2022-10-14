@@ -1,4 +1,19 @@
-import { isArray } from 'lodash'
+import { isArray, isEqual } from 'lodash'
+
+export function arrayEquals<T>(left: T[] | null | undefined, right: T[] | null | undefined, equals: (a: T, b: T) => boolean = isEqual): boolean {
+  if (left == null) { return right == null }
+  if (right == null) { return false }
+
+  if (left.length !== right.length) { return false }
+
+  for (let i = 0; i < left.length; i++) {
+    if (!equals(left[i], right[i])) {
+      return false
+    }
+  }
+
+  return true
+}
 
 export function arrayMove<T>(array: T[], predicate: (it: T) => boolean, toIndex: number) {
   const fromIndex = array.findIndex(predicate)

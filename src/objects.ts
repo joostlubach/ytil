@@ -1,4 +1,19 @@
-import { isArray, isObject, isPlainObject } from 'lodash'
+import { isArray, isEqual, isObject, isPlainObject } from 'lodash'
+
+export function objectEquals(left: AnyObject | null | undefined, right: AnyObject | null | undefined, equals: (a: any, b: any) => boolean = isEqual): boolean {
+  if (left == null) { return right == null }
+  if (right == null) { return false }
+
+  if (Object.keys(left).length !== Object.keys(right).length) { return false }
+
+  for (const key of Object.keys(left)) {
+    if (!equals(left[key], right[key])) {
+      return false
+    }
+  }
+
+  return true
+}
 
 export async function modifyInObject<T extends AnyObject>(root: T, path: string, modify: ModifyInObjectCallback) {
   const segments = path.split('.')
