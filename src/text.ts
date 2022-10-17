@@ -1,4 +1,4 @@
-export function cleanTextValue(value: string | null, trim = false): string | null {
+export function cleanTextValue(value: string | null | undefined, trim = false): string | null {
   if (value == null) { return null }
 
   if (trim) {
