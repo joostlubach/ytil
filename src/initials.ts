@@ -9,7 +9,7 @@ export function deriveInitials(arg: InitialsDerivable) {
   let parts: string[]
   if (typeof arg === 'string') {
     parts = arg.split(' ', 2)
-  } else if (arg.hasOwnProperty('firstName')) {
+  } else if ('firstName' in arg) {
     parts = [
       cleanTextValue((arg as any).firstName),
       cleanTextValue((arg as any).lastName),
