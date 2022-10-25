@@ -12,5 +12,6 @@ export * from './promises'
 export * from './pseudoRandom'
 export * from './react'
 export * from './regexp'
+export * from './select'
 export * from './text'
 // /index
