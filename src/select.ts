@@ -1,9 +1,9 @@
 export function select<V>(key: string | null | undefined, map: {[key: string]: V, default: V}): V
 export function select<V>(key: string | null | undefined, map: {[key: string]: V}): V | undefined
 export function select(key: string | null | undefined, map: AnyObject) {
-  if (key && map.hasOwnProperty(key)) {
+  if (key && key in map) {
     return map[key]
-  } else if (map.hasOwnProperty('default')) {
+  } else if ('default' in map) {
     return map.default
   } else {
     return null
