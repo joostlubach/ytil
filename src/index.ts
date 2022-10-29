@@ -1,11 +1,12 @@
 // @index: export * from ${relpath}
-export * from './SetOperations'
 export * from './EnumUtil'
 export * from './MapBuilder'
+export * from './SetOperations'
 export * from './arrays'
 export * from './autolink'
 export * from './initials'
 export * from './ms'
+export * from './numbers'
 export * from './objectID'
 export * from './objects'
 export * from './panic'
