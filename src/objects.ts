@@ -32,7 +32,7 @@ export function modifyObject(root: AnyObject | AnyObject[], path: string, modifi
 function modify(obj: any, segments: string[], modifier: (value: any) => any): any {
   if (segments.length === 0) {
     // We've arrived at the leaf, just run the modifier.
-    return isArray(obj) ? obj.map(modifier) : modifier(obj)
+    return modifier(obj)
   }
 
   // If we've arrived at an array, map over it instead of continuing.
