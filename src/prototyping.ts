@@ -1,4 +1,4 @@
 export function superConstructor(ctor: Function) {
-  const superProto = ctor.prototype.__proto__
+  const superProto = Object.getPrototypeOf(ctor.prototype)
   return superProto?.constructor ?? null
 }

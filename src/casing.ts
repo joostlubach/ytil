@@ -1,4 +1,4 @@
-import { isArray, isPlainObject, snakeCase } from 'lodash'
+import { snakeCase } from 'lodash'
 
 const acronyms = ['id', 'url']
 
@@ -35,30 +35,4 @@ export function camelCaseKey(key: string) {
 
 export function snakeCaseKey(key: string) {
   return snakeCase(key)
-}
-
-export function camelCaseKeys<T extends Record<string, any>>(obj: T): T {
-  if (isPlainObject(obj)) {
-    return Object.entries(obj).reduce((res, [key, value]) => ({
-      ...res,
-      [camelCaseKey(key)]: camelCaseKeys(value),
-    }), {}) as T
-  } else if (isArray(obj)) {
-    return obj.map(camelCaseKeys) as any as T
-  } else {
-    return obj
-  }
-}
-
-export function snakeCaseKeys<T extends Record<string, any>>(obj: T): T {
-  if (isPlainObject(obj)) {
-    return Object.entries(obj).reduce((res, [key, value]) => ({
-      ...res,
-      [snakeCaseKey(key)]: snakeCaseKeys(value),
-    }), {}) as T
-  } else if (isArray(obj)) {
-    return obj.map(camelCaseKeys) as any as T
-  } else {
-    return obj
-  }
 }
