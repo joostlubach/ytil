@@ -1,9 +1,60 @@
-export function cleanTextValue(value: string | null | undefined, trim = false): string | null {
+export function cleanTextValue(value: string | null | undefined, trim: boolean = false): string | null {
   if (value == null) { return null }
 
   if (trim) {
-    value = value.trim()
+    value = value.replace(/^[\r\n\s\u{200B}]+|[\r\n\s\u{200B}]+$/gu, '')
   }
 
   return value === '' ? null : value
+}
+
+export function stringContains(string: string, word: string) {
+  return slugify(string).includes(slugify(word))
+}
+
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFKD')               // Remove accents
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents, part 2
+    .replace(/[^a-z0-9]+/gi, '-')
+    .replace(/^-|-$/g, '')
+}
+
+export function stringHash(str: string) {
+  let hash = 0
+
+  for (let i = 0; i < str.length; i++) {
+    const chr = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + chr
+    hash >>>= 0
+  }
+
+  return hash
+}
+
+export function truncate(text: string, length: number, options: TruncateOptions) {
+  const {
+    omission = ' … ',
+    anchor   = 'start',
+  } = options
+
+  if (text.length <= length) { return text }
+
+  const lengthPre =
+    anchor === 'start' ? 0 :
+    anchor === 'end' ? length :
+    Math.ceil(length / 2 - omission.length / 2)
+
+  const lengthPost =
+    anchor === 'start' ? 0 :
+    anchor === 'end' ? length :
+    Math.floor(length / 2 - omission.length / 2)
+
+  return text.slice(0, lengthPre) + omission + text.slice(-lengthPost)
+}
+
+export interface TruncateOptions {
+  omission?: string
+  anchor?:   'start' | 'middle' | 'end'
 }

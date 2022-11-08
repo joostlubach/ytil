@@ -2,7 +2,6 @@
   "name": "ytil",
   "version": "1.0.0",
   "description": "Utility stuff that I use a lot",
-  "main": "index.ts",
   "author": "Joost Lubach",
   "license": "MIT",
   "dependencies": {

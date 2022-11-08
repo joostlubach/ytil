@@ -15,12 +15,18 @@ export function arrayEquals<T>(left: T[] | null | undefined, right: T[] | null |
   return true
 }
 
-export function arrayMove<T>(array: T[], predicate: (it: T) => boolean, toIndex: number) {
-  const fromIndex = array.findIndex(predicate)
-  if (fromIndex < 0) { return array }
+export function arrayMove<T>(array: T[], fromIndex: number, toIndex: number): T[] {
+  if (fromIndex === toIndex) { return array }
+  if (fromIndex < 0 || fromIndex >= array.length) { return array }
 
-  const item = array.splice(fromIndex, 1)[0]
-  array.splice(toIndex > fromIndex ? toIndex - 1 : toIndex, 0, item)
+  if (toIndex < 0) { toIndex = 0 }
+  if (toIndex >= array.length) { toIndex = array.length - 1 }
+
+  const newArray = [...array]
+  const item = newArray.splice(fromIndex, 1)
+  newArray.splice(toIndex, 0, ...item)
+
+  return newArray
 }
 
 export function splitArray<T>(array: T[], predicate: (item: T) => boolean): [T[], T[]] {
