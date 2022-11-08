@@ -15,7 +15,7 @@ export function svgPath(points: Point[], options: SVGPathOptions = {}): string {
   let path = `M ${head.x} ${head.y}`
   for (const [index, point] of tail.entries()) {
     const prevPoint = points[index]
-    let nextPoint = options.close && index === tail.length - 1
+    const nextPoint = options.close && index === tail.length - 1
       ? head
       : tail[index + 1]
 
