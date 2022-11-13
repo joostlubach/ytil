@@ -1,11 +1,13 @@
 export abstract class EnumUtil {
 
   public static names<V>(enumType: Record<string, V>): string[] {
-    return Object.keys(enumType)
+    const count = Object.keys(enumType).length
+    return Object.values(enumType).slice(0, count / 2) as string[]
   }
 
   public static values<V>(enumType: Record<string, V>): V[] {
-    return Object.values(enumType)
+    const count = Object.keys(enumType).length
+    return Object.values(enumType).slice(count / 2) as V[]
   }
 
 }
