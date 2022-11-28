@@ -54,11 +54,18 @@ export type EnumTypeOf<V extends string | number> =
 export type AnyEnumType = EnumTypeOf<any>
 
 /**
+ * Extract enum names.
+ */
+export type EnumName<E extends AnyEnumType> =
+  E extends Record<infer T, any> ? T : never
+
+
+/**
  * Extract enum value.
  *
  * - `EnumValue<typeof StringEnum> === StringEnum`
  * - `EnumValue<typeof NumberEnum> === NumberEnum`
  */
 export type EnumValue<E extends AnyEnumType> =
-  E extends Record<string, infer T extends string> ? T :
-  E extends Record<string, infer T> ? Exclude<T, string> : never
+  E extends Record<string, string> ? E extends Record<string, infer T> ? T :
+  E extends Record<string, infer T> ? Exclude<T, string> : never : never
