@@ -1,6 +1,7 @@
 // @index: export * from ${relpath}
 export * from './EnumUtil'
 export * from './MapBuilder'
+export * from './MapUtil'
 export * from './SetOperations'
 export * from './arrays'
 export * from './autolink'
