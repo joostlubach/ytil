@@ -10,7 +10,7 @@ export const MapUtil = {
   },
 
   mapToObject<K extends PropertyKey, V>(map: Map<K, V>): Record<K, V> {
-    return Object.fromEntries(map.entries())
+    return Object.fromEntries(map.entries()) as Record<K, V>
   },
 
 
