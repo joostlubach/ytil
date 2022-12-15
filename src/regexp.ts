@@ -25,3 +25,18 @@ export function parseRegExp(pattern: string) {
     return new RegExp(pattern)
   }
 }
+
+export function tryRegExp(subject: string, regExp: RegExp, parse: (match: RegExpMatchArray) => string): string | null {
+  const match = subject.match(regExp)
+  return match == null ? null : parse(match)
+}
+
+export function tryRegExps(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => string | null]>): string | null {
+  for (const [regExp, parse] of entries) {
+    const match = subject.match(regExp)
+    if (match == null) { continue }
+    return parse(match)
+  }
+
+  return null
+}
