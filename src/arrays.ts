@@ -1,5 +1,13 @@
 import { isArray, isEqual } from 'lodash'
 
+export function wrapArray<T>(arg: T | T[]): T[] {
+  if (isArray(arg)) {
+    return arg
+  } else {
+    return [arg]
+  }
+}
+
 export function arrayEquals<T>(left: T[] | null | undefined, right: T[] | null | undefined, equals: (a: T, b: T) => boolean = isEqual): boolean {
   if (left == null) { return right == null }
   if (right == null) { return false }
