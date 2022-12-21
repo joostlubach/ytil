@@ -78,3 +78,10 @@ export interface ResizeBoundsOptions {
   minimumWidth?:  number
   minimumHeight?: number
 }
+
+export interface LayoutRect {
+  top:    number
+  left:   number
+  width:  number
+  height: number
+}
