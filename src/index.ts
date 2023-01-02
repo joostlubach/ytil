@@ -2,6 +2,7 @@
 export * from './EnumUtil'
 export * from './MapBuilder'
 export * from './MapUtil'
+export * from './Matrix3D'
 export * from './SetOperations'
 export * from './arrays'
 export * from './autolink'
