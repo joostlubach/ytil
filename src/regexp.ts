@@ -31,12 +31,14 @@ export function tryRegExp(subject: string, regExp: RegExp, parse: (match: RegExp
   return match == null ? null : parse(match)
 }
 
-export function tryRegExps(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => string | null]>): string | null {
+export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>): T | undefined
+export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>, defaultValue: T): T
+export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>, defaultValue?: T): T | undefined {
   for (const [regExp, parse] of entries) {
     const match = subject.match(regExp)
     if (match == null) { continue }
     return parse(match)
   }
 
-  return null
+  return defaultValue
 }
