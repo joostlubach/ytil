@@ -1,4 +1,4 @@
-import { escapeRegExp } from 'lodash'
+import { escapeRegExp, isFunction } from 'lodash'
 
 export interface PatternToRegExpOptions {
   anchor?:    boolean | 'start' | 'end'
@@ -32,13 +32,13 @@ export function tryRegExp(subject: string, regExp: RegExp, parse: (match: RegExp
 }
 
 export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>): T | undefined
-export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>, defaultValue: T): T
-export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>, defaultValue?: T): T | undefined {
+export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>, defaultValue: T | (() => T)): T
+export function switchRegExp<T>(subject: string, entries: Array<[RegExp, (match: RegExpMatchArray) => T]>, defaultValue?: T | (() => T)): T | undefined {
   for (const [regExp, parse] of entries) {
     const match = subject.match(regExp)
     if (match == null) { continue }
     return parse(match)
   }
 
-  return defaultValue
+  return isFunction(defaultValue) ? defaultValue() : defaultValue
 }
