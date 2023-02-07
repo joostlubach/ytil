@@ -2,13 +2,18 @@ import { snakeCase } from 'lodash'
 
 const acronyms = ['id', 'url']
 
-export function camelCaseKey(key: string) {
-  const re = /[^a-z0-9A-Z]+|[A-Z]/
+export function camelCaseKey(key: string | number | symbol) {
+  if (typeof key === 'number') {
+    return key
+  }
 
-  let remaining = key
+  const re = /[^a-z0-9A-Z]+|[A-Z]/
+  const keyString = String(key)
+
+  let remaining = keyString
   let current   = ''
   let result    = ''
-  let match     = key.match(re)
+  let match     = keyString.match(re)
 
   const appendPart = (part: string) => {
     if (remaining === key) {
@@ -30,7 +35,11 @@ export function camelCaseKey(key: string) {
   }
 
   appendPart(current + remaining)
-  return result
+  if (typeof key === 'symbol') {
+    return Symbol(result)
+  } else {
+    return result
+  }
 }
 
 export function snakeCaseKey(key: string) {
