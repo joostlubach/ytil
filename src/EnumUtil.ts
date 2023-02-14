@@ -38,7 +38,7 @@ export abstract class EnumUtil {
   public static isStringEnum(Enum: AnyEnumType): Enum is EnumTypeOf<string> {
     return every(
       Object.entries(Enum),
-      ([key, value]) => typeof key === 'string' && typeof value === 'string'
+      ([key, value]) => typeof key === 'string' && typeof value === 'string',
     )
   }
 
