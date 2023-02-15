@@ -25,6 +25,26 @@ export function offsetBounds(bounds: LayoutRect, delta: Point) {
   }
 }
 
+export function expandRect(rect: Rect, insets: number | Partial<Insets>) {
+  const inset = (prop: keyof Insets) => typeof insets === 'number' ? insets : (insets[prop] ?? 0)
+
+  return {
+    x:      rect.x - inset('left'),
+    y:      rect.y - inset('top'),
+    width:  rect.width + inset('left') + inset('right'),
+    height: rect.height + inset('top') + inset('bottom'),
+  }
+}
+
+export function rectExtents(rect: Rect): Point[] {
+  return [
+    {x: rect.x, y: rect.y},
+    {x: rect.x + rect.width, y: rect.y},
+    {x: rect.x + rect.width, y: rect.y + rect.height},
+    {x: rect.x, y: rect.y + rect.height},
+  ]
+}
+
 export function resizeBoundsBy(bounds: LayoutRect, handlePoint: Point, delta: Point, options: ResizeBoundsOptions = {}) {
   const {roundTo, minimumWidth = 0, minimumHeight = 0} = options
 
