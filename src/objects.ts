@@ -60,7 +60,7 @@ function modify(obj: any, segments: string[], modifier: (value: any) => any): an
 //------
 // modifyInObject
 
-export function modifyInObject<T extends AnyObject>(root: T, path: string, modify: ModifyInObjectCallback) {
+export function modifyInObject<R extends AnyObject>(root: R, path: string, modify: ModifyInObjectCallback<R>) {
   const segments = path.split('.')
   const leaf     = segments.pop()!
 
@@ -77,8 +77,23 @@ export function modifyInObject<T extends AnyObject>(root: T, path: string, modif
   }
   if (current == null) { return false }
 
-  const retval = modify(root, current, leaf)
-  return retval === false ? false : true
+  // If we've arrived at an array, map over it instead of continuing, unless the path explicitly
+  // wants to target a specific index.
+  const hasIndex       = /^\d+$/.test(leaf)
+  const currentIsArray = isArray(current)
+
+  if (currentIsArray && !hasIndex) {
+    for (const item of current) {
+      const retval = modify(item[leaf], item, leaf, root)
+      if (retval === false) { return false }
+    }
+    return true
+  } else if (hasIndex) {
+    const index = parseInt(leaf, 10)
+    return modify(current[index], current, index, root) ?? true
+  } else {
+    return modify(current[leaf], current, leaf, root) ?? true
+  }
 }
 
 function keyToIndex(key: string) {
@@ -89,10 +104,11 @@ function keyToIndex(key: string) {
   return index
 }
 
-export type ModifyInObjectCallback = <T extends AnyObject>(
-  root:   T,
+export type ModifyInObjectCallback<R extends AnyObject> = <T>(
+  value:  T,
   parent: any,
-  key:    string | number
+  key:    string | number,
+  root:   R
 ) => void | boolean
 
 //------
