@@ -3,7 +3,7 @@ import { isArray, isEqual, isObject, isPlainObject } from 'lodash'
 //------
 // objectEquals
 
-export function objectEquals(left: AnyObject | null | undefined, right: AnyObject | null | undefined, equals: (a: any, b: any) => boolean = isEqual): boolean {
+export function objectEquals(left: Record<string, any> | null | undefined, right: Record<string, any> | null | undefined, equals: (a: any, b: any) => boolean = isEqual): boolean {
   if (left == null) { return right == null }
   if (right == null) { return false }
 
@@ -21,10 +21,10 @@ export function objectEquals(left: AnyObject | null | undefined, right: AnyObjec
 //------
 // modifyObject
 
-export function modifyObject<T extends AnyObject>(root: T, path: string, modifier: (value: any) => any): T
-export function modifyObject<T extends AnyObject>(root: T[], path: string, modifier: (value: any) => any): T[]
-export function modifyObject<T extends AnyObject>(root: T | T[], path: string, modifier: (value: any) => any): T | T[]
-export function modifyObject(root: AnyObject | AnyObject[], path: string, modifier: (value: any) => any) {
+export function modifyObject<T extends Record<string, any>>(root: T, path: string, modifier: (value: any) => any): T
+export function modifyObject<T extends Record<string, any>>(root: T[], path: string, modifier: (value: any) => any): T[]
+export function modifyObject<T extends Record<string, any>>(root: T | T[], path: string, modifier: (value: any) => any): T | T[]
+export function modifyObject(root: Record<string, any> | Record<string, any>[], path: string, modifier: (value: any) => any) {
   const segments = path.split('.').filter(Boolean)
   return modify(root, segments, modifier)
 }
@@ -50,7 +50,7 @@ function modify(obj: any, segments: string[], modifier: (value: any) => any): an
   const prop = segments.shift()!
   if (prop in obj) {
     // Take the next path segment from the list and replace it.
-    return {...obj, [prop]: modify(obj[prop], segments, modifier)}
+    return { ...obj, [prop]: modify(obj[prop], segments, modifier) }
   } else {
     // The property did not exist. Just return the object (instead of inserting an explicit `undefined`).
     return obj
@@ -60,9 +60,9 @@ function modify(obj: any, segments: string[], modifier: (value: any) => any): an
 //------
 // modifyInObject
 
-export function modifyInObject<R extends AnyObject>(root: R, path: string, modify: ModifyInObjectCallback<R>) {
+export function modifyInObject<R extends Record<string, any>>(root: R, path: string, modify: ModifyInObjectCallback<R>) {
   const segments = path.split('.')
-  const leaf     = segments.pop()!
+  const leaf = segments.pop()!
 
   let current: any = root
   while (current != null && segments.length > 0) {
@@ -79,7 +79,7 @@ export function modifyInObject<R extends AnyObject>(root: R, path: string, modif
 
   // If we've arrived at an array, map over it instead of continuing, unless the path explicitly
   // wants to target a specific index.
-  const hasIndex       = /^\d+$/.test(leaf)
+  const hasIndex = /^\d+$/.test(leaf)
   const currentIsArray = isArray(current)
 
   if (currentIsArray && !hasIndex) {
@@ -104,11 +104,11 @@ function keyToIndex(key: string) {
   return index
 }
 
-export type ModifyInObjectCallback<R extends AnyObject> = <T>(
-  value:  T,
+export type ModifyInObjectCallback<R extends Record<string, any>> = <T>(
+  value: T,
   parent: any,
-  key:    string | number,
-  root:   R
+  key: string | number,
+  root: R
 ) => void | boolean
 
 //------

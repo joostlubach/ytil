@@ -1,5 +1,5 @@
 export function csvArrayToJSON(values: any[][], options: CSVArrayToJSONOptions = {}) {
-  const body   = [...values]
+  const body = [...values]
   const fields = options.fields ?? body.shift()
   if (fields == null) { return [] }
 
@@ -15,7 +15,7 @@ export function csvArrayToJSON(values: any[][], options: CSVArrayToJSONOptions =
   }
 
   const rowToJSON = (values: any[]) => {
-    const item: AnyObject = {}
+    const item: Record<string, any> = {}
     for (const [index, field] of fields.entries()) {
       item[field] = convertValue(field, values[index])
     }
@@ -27,6 +27,6 @@ export function csvArrayToJSON(values: any[][], options: CSVArrayToJSONOptions =
 
 export interface CSVArrayToJSONOptions {
   fields?: string[]
-  trim?:    boolean
+  trim?: boolean
   convert?: (field: string, value: any) => any
 }

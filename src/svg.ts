@@ -1,8 +1,9 @@
 import { range } from 'lodash'
+import { Point } from './geometry'
 
 export interface SVGPathOptions {
   roundCorners?: number | number[]
-  close?:        boolean
+  close?: boolean
 }
 
 export function svgPath(points: Point[], options: SVGPathOptions = {}): string {
@@ -22,7 +23,7 @@ export function svgPath(points: Point[], options: SVGPathOptions = {}): string {
 
   const cornerMetricsAt = (index: number): Point[] => {
     const point = points[index]
-    const r     = cornerRadiusAt(index)
+    const r = cornerRadiusAt(index)
     if (r === 0) { return [point] }
 
     let prevPoint: Point
@@ -63,7 +64,7 @@ export function svgPath(points: Point[], options: SVGPathOptions = {}): string {
   const metrics = range(0, points.length).map(cornerMetricsAt)
 
   let first = true
-  let path  = ''
+  let path = ''
 
   for (const index of range(0, points.length)) {
     const [p1, p2, p3] = metrics[index]

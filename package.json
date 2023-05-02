@@ -4,13 +4,26 @@
   "description": "Utility stuff that I use a lot",
   "author": "Joost Lubach",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc -p .",
+    "preinstall": "pnpm build"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "peerDependencies": {
+    "typescript": "*"
+  },
   "dependencies": {
     "lodash": "^4.17.21",
     "ms": "^2.1.3"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.191",
+    "@types/lodash": "^4.14.194",
     "@types/ms": "^0.7.31",
-    "@types/node": "^18.15.7"
+    "@types/node": "^18.16.3"
   }
 }
