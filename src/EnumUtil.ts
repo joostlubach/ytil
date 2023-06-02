@@ -42,6 +42,12 @@ export abstract class EnumUtil {
     )
   }
 
+  public static coerce<E extends AnyEnumType>(Enum: E, value: any): EnumValue<E> | undefined {
+    if (this.values(Enum).includes(value)) {
+      return value as EnumValue<E>
+    }
+  }
+
 }
 
 /**
