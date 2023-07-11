@@ -5,14 +5,13 @@
   "author": "Joost Lubach",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p ."
+    "build": "yarn clean && tsc -p .",
+    "clean": "rimraf dist"
   },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./*": {
       "import": "./src/*.ts",
@@ -30,6 +29,8 @@
     "@types/lodash": "^4.14.194",
     "@types/ms": "^0.7.31",
     "@types/node": "^18.16.3",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^5.0.1",
     "typescript": "^5.0.4",
     "vite": "^4.2.0",
     "vite-plugin-dts": "^2.1.0",

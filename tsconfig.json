@@ -14,8 +14,8 @@
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "baseUrl": "src",
-    "rootDir": "src"
+    "rootDir": "src",
+    "baseUrl": "."
   },
   "include": [
     "src"

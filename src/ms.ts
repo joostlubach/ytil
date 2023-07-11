@@ -1,4 +1,4 @@
-import { ms as msOrig } from 'ms'
+import msOrig from 'ms'
 
 export function ms(input: string | number): number {
   if (typeof input === 'string') {
