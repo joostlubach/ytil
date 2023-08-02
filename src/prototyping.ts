@@ -1,16 +1,15 @@
+import { AnyConstructor, AnyConstructorOf } from './types'
+
 export function superConstructor(ctor: AnyConstructor) {
   const superProto = Object.getPrototypeOf(ctor.prototype)
   return superProto?.constructor ?? null
 }
 
-export type AnyConstructor = Constructor<any>
-export type Constructor<T> = new (...args: any[]) => T
-
-export function createConstructorWithName<T extends Constructor<any>>(name: string, superConstructor?: T): T
+export function createConstructorWithName<T extends AnyConstructorOf<any>>(name: string, superConstructor?: T): T
 
 // Create an overload with just Function as argument name to support creating classes with an abstract base class.
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function createConstructorWithName<T extends Constructor<any>>(name: string, superConstructor?: Function): T
+export function createConstructorWithName<T extends AnyConstructorOf<any>>(name: string, superConstructor?: Function): T
 
 export function createConstructorWithName(name: string, superConstructor?: any) {
   // Yay I came up with a trick to create a class with a run-time name.
