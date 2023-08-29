@@ -1,4 +1,6 @@
-export type Constructor<A extends any[], T> = new (...args: A) => T
-export type AnyConstructorOf<T> = Constructor<any, T>
-export type AnyConstructor = AnyConstructorOf<any>
-export type InstanceOf<C> = C extends AnyConstructorOf<infer T> ? T : never
+export type Constructor<T> = new (...args: any[]) => T
+export type AnyConstructor = Constructor<any>
+export type InstanceOf<C> = C extends Constructor<infer T> ? T : never
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends Record<any, any> ? DeepPartial<T[K]> : T[K]
+}
