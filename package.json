@@ -36,6 +36,7 @@
     "typescript": "*"
   },
   "dependencies": {
+    "error-polyfill": "^0.1.3",
     "lodash": "^4.17.21",
     "ms": "^2.1.3"
   },
