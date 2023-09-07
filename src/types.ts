@@ -9,5 +9,4 @@ export type DeepPartial<T> = {
 }
 
 export type TypedClassDecorator<T extends AnyConstructor> = (target: T) => T | void
-export type TypedPropertyDecorator<T> = (target: Object, key: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
 export type TypedMethodDecorator<T extends AnyFunction> = (target: Object, key: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
