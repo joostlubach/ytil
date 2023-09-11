@@ -1,6 +1,6 @@
 /* eslint-disable no-bitwise */
 export function pseudoRandom(seedOrString: number | string, min: number, max: number) {
-  if (max < min) { throw new Error("max must be grater than min") }
+  if (max < min) { throw new Error("max must be greater than min") }
   if (max === min) { return min }
 
   const seed = typeof seedOrString === 'number' ? seedOrString : stringHash(seedOrString)
