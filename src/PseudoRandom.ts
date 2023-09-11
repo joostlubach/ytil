@@ -1,3 +1,5 @@
+import { stringHash } from './text'
+
 // Stolen & adapted from https://github.com/coverslide/node-alea.
 // Which was adapted from a version by Johannes Baagøe <baagoe@baagoe.com>, 2010
 export class PseudoRandom {
@@ -9,6 +11,10 @@ export class PseudoRandom {
     this.s0 = clamp(mash(' ') - mash(seed));
     this.s1 = clamp(mash(' ') - mash(seed));
     this.s2 = clamp(mash(' ') - mash(seed));
+  }
+
+  public static from(seed: string) {
+    return new PseudoRandom(stringHash(seed))
   }
 
   private c: number = 1
@@ -24,12 +30,25 @@ export class PseudoRandom {
     return this.s2
   }
 
-  public nextUint32() {
-    return this.next() * 0x100000000; // 2^32
+  public uint(): number
+  public uint(min: number, max: number): number
+  public uint(min?: number, max?: number) {
+    if (min == null || max == null) {
+      return this.next() * 0x100000000
+    } else {
+      return Math.floor(min + this.next() * (max - min))
+    }
   }
 
-  public fract53() {
-    return this.next() + (this.next() * 0x200000 | 0) * 1.1102230246251565e-16;
+  public float(): number
+  public float(min: number, max: number): number
+  public float(min?: number, max?: number) {
+    const val = this.next() + (this.next() * 0x200000 | 0) * 1.1102230246251565e-16
+    if (min == null || max == null) {
+      return val
+    } else {
+      return min + val * (max - min)
+    }
   }
 
 }
