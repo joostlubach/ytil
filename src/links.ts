@@ -9,7 +9,7 @@ const PHONE_REGEXP    = /^\s*[-+()\d\s]{3,}\s*$/i
  * @param text The text to find the links in.
  * @returns The found link.
  */
-export function autolinkHref(text: string): string | null {
+export function detectLink(text: string): string | null {
   // Check for email.
   if (PROTOCOL_REGEXP.test(text)) {
     return text
