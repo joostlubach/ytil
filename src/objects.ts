@@ -1,4 +1,4 @@
-import { isArray, isEqual, isObject, isPlainObject } from 'lodash'
+import { isArray, isEqual, isFunction, isObject, isPlainObject } from 'lodash'
 
 //------
 // objectEquals
@@ -139,5 +139,25 @@ export function deepMapValues(arg: any, fn: (value: any) => any): any {
     return arg.map(it => deepMapValues(it, fn))
   } else {
     return fn(arg)
+  }
+}
+
+//------
+// Methods
+
+export function bindMethods(obj: object) {
+  let current = obj
+
+  while (current != null && current !== Object) {
+    for (const name of Object.getOwnPropertyNames(current)) {
+      const value = (current as any)[name]
+      if (!isFunction(value)) { continue }
+
+      Object.assign(obj, {
+        [name]: value.bind(obj)
+      })
+    }
+
+    current = Object.getPrototypeOf(current)
   }
 }
