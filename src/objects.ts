@@ -1,5 +1,9 @@
 import { isArray, isEqual, isFunction, isObject, isPlainObject } from 'lodash'
 
+export function emptyObject() {
+  return {}
+}
+
 //------
 // objectEquals
 
