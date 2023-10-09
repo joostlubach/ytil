@@ -28,6 +28,17 @@ describe("NestedMap", () => {
     expect(map.get('unknown', 3)).toEqual(undefined)
   })
 
+  it("should have an ensure function that gets an item and adds it if not found", () => {
+    const map = new NestedMap<[string, number], string>()
+    map.set('foo', 1, 'bar')
+
+    map.ensure('foo', 1, () => 'baz')
+    map.ensure('foo', 2, () => 'baz')
+
+    expect(map.get('foo', 1)).toEqual('bar')
+    expect(map.get('foo', 2)).toEqual('baz')
+  })
+
   it("should allow deleting items", () => {
     const map = new NestedMap<[string, number], string>()
 

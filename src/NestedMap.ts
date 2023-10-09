@@ -22,7 +22,7 @@ export class NestedMap<Keys extends [any, ...any[]], Value> {
 
   public ensure(...args: [...Keys, () => Value]): Value {
     const head   = [...args] as any as Keys
-    const defVal = args.pop()! as () => Value
+    const defVal = head.pop()! as () => Value
     const tail   = head.pop()! as Keys[number]
 
     const leaf = this.resolveLeaf(head, true)
