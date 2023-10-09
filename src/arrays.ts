@@ -52,8 +52,8 @@ export function splitArray<T>(array: T[], predicate: (item: T) => boolean): [T[]
   return [matching, rest]
 }
 
-export function sparse<T>(array: Array<T | false | null | 0 | undefined>): T[] {
-  return array.filter(Boolean) as T[]
+export function sparse<T>(array: Array<T | false | null | undefined>): T[] {
+  return array.filter(it => it === 0 || !!it) as T[]
 }
 
 export function flatMap<T, U>(input: T[], fn: (value: T) => U | U[]): U[] {
