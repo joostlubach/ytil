@@ -1,15 +1,7 @@
-export class NestedMap<Keys extends [any, ...any[]], Value> {
+export class NestedWeakMap<Keys extends [any, ...any[]], Value> {
 
-  private readonly _map = new Map<any, any>()
+  private readonly _map = new WeakMap<any, any>()
   public get map() { return this._map }
-
-  public has(...keys: Keys): boolean {
-    const head = [...keys] as Keys
-    const tail = head.pop()!
-
-    const leaf = this.resolveLeaf(head, false)
-    return leaf?.has(tail) ?? false
-  }
 
   public get(...keys: Keys): Value | undefined {
     const head = [...keys] as Keys
@@ -50,10 +42,6 @@ export class NestedMap<Keys extends [any, ...any[]], Value> {
     leaf?.delete(tail)
 
     this.cleanUp(head)
-  }
-
-  public clear() {
-    this.map.clear()
   }
 
   private resolveLeaf(keys: Keys, create: true): Map<any, any>
