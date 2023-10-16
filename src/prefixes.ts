@@ -1,4 +1,4 @@
-export function prefix(prefix: string | null, options: PrefixOptions = {}) {
+export function prefix(prefix: string | null | undefined, options: PrefixOptions = {}) {
   if (prefix == null) {
     return (subject: string) => subject
   } else {
@@ -6,7 +6,7 @@ export function prefix(prefix: string | null, options: PrefixOptions = {}) {
   }
 }
 
-export function unprefix(prefix: string | null, options: PrefixOptions = {}) {
+export function unprefix(prefix: string | null | undefined, options: PrefixOptions = {}) {
   if (prefix == null) {
     return (subject: string) => subject
   } else {
