@@ -7,6 +7,7 @@ export type InstanceOf<C> = C extends Constructor<infer T> ? T : never
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends Record<any, any> ? DeepPartial<T[K]> : T[K]
 }
+export type SomePartial<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 export type TypedClassDecorator<T extends AnyConstructor> = (target: T) => T | void
 export type TypedMethodDecorator<T extends AnyFunction> = (target: Object, key: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
