@@ -1,6 +1,6 @@
 export abstract class MapUtil {
 
-  public static sparse<K extends PropertyKey, V>(map: Map<K, V | null | undefined>): Map<K, V> {
+  public static sparse<K, V>(map: Map<K, V | null | undefined>): Map<K, V> {
     const result = new Map<K, V>()
     for (const [key, value] of map.entries()) {
       if (value == null) { continue }
@@ -13,7 +13,7 @@ export abstract class MapUtil {
     return Object.fromEntries(map.entries()) as Record<K, V>
   }
 
-  public static ensure<K extends PropertyKey, V>(map: Map<K, V>, key: K, defaultValue: () => V): V
+  public static ensure<K, V>(map: Map<K, V>, key: K, defaultValue: () => V): V
   public static ensure<K extends object, V>(map: WeakMap<K, V>, key: K, defaultValue: () => V): V
   public static ensure(map: Map<any, any> | WeakMap<any, any>, key: any, defaultValue: () => any) {
     const value = map.get(key)
