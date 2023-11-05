@@ -1,4 +1,4 @@
-// @index: export * from ${relpath}
+// @index(!__tests__): export * from ${relpath}
 export * from './EnumUtil'
 export * from './MapBuilder'
 export * from './MapUtil'
@@ -28,6 +28,7 @@ export * from './prefixes'
 export * from './promises'
 export * from './prototyping'
 export * from './regexp'
+export * from './resolve'
 export * from './safe-ms'
 export * from './select'
 export * from './svg'
