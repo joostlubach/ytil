@@ -1,6 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/ban-types */
 
 import { AnyConstructor, Constructor } from './types'
+
+export function resolveConstructor(arg: any) {
+  if (typeof arg === 'function' && arg.prototype != null) {
+    return arg
+  }
+  if (typeof arg === 'object' && arg.constructor != null) {
+    return arg.constructor
+  }
+
+  throw new Error(`Expected a class or class instance (constructor or prototype): ${arg}`)
+}
 
 export function superConstructor(ctor: AnyConstructor) {
   const superProto = Object.getPrototypeOf(ctor.prototype)

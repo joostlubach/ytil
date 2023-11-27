@@ -1,6 +1,6 @@
-export class NestedWeakMap<Keys extends [object, ...object[]], Value> {
+export class NestedWeakMap<Keys extends [unknown, ...unknown[]], Value> {
 
-  private readonly _map = new WeakMap<object, unknown>()
+  private readonly _map = new WeakMap<any, unknown>()
   public get map() { return this._map }
 
   public get(...keys: Keys): Value | undefined {

@@ -35,7 +35,7 @@ export function modifyObject(root: UnknownObject | UnknownObject[], path: string
   return modify(root, segments, modifier)
 }
 
-function modify<O extends object>(obj: O, segments: ObjectKey[], modifier: <T>(value: T) => unknown): object {
+function modify<O>(obj: O, segments: ObjectKey[], modifier: <T>(value: T) => unknown): object {
   const modify = (obj: unknown, segments: ObjectKey[], modifier: <T>(value: T) => unknown): unknown => {
     if (segments.length === 0) {
       // We've arrived at the leaf, just run the modifier.
@@ -70,7 +70,7 @@ function modify<O extends object>(obj: O, segments: ObjectKey[], modifier: <T>(v
 // ------
 // modifyInObject
 
-export function modifyInObject<R extends object>(root: R, path: string, modify: ModifyInObjectCallback<R>) {
+export function modifyInObject<R>(root: R, path: string, modify: ModifyInObjectCallback<R>): boolean {
   const segments = path.split('.')
   const leaf = segments.pop()!
 
@@ -102,6 +102,8 @@ export function modifyInObject<R extends object>(root: R, path: string, modify: 
     return modify(current[index], current, index, root) ?? true
   } else if (isObject(current)) {
     return modify((current as UnknownObject)[leaf], current, leaf, root) ?? true
+  } else {
+    return false
   }
 }
 
@@ -113,7 +115,7 @@ function keyToIndex(key: string) {
   return index
 }
 
-export type ModifyInObjectCallback<R extends object> = <T>(
+export type ModifyInObjectCallback<R> = <T>(
   value: T,
   parent: unknown,
   key: string | number,
@@ -123,7 +125,7 @@ export type ModifyInObjectCallback<R extends object> = <T>(
 // ------
 // deepMap*
 
-export function deepMapKeys<O extends object>(arg: O, fn: (key: ObjectKey) => ObjectKey): object {
+export function deepMapKeys<O>(arg: O, fn: (key: ObjectKey) => ObjectKey): object {
   const visit = (arg: unknown): unknown => {
     if (isArray(arg)) {
       return arg.map(it => deepMapKeys(it, fn))
