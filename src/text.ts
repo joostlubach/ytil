@@ -15,7 +15,7 @@ export function stringContains(string: string, word: string) {
 export function slugify(text: string): string {
   return text
     .toLowerCase()
-    .normalize('NFKD')               // Remove accents
+    .normalize('NFKD') // Remove accents
     .replace(/[\u0300-\u036f]/g, '') // Remove accents, part 2
     .replace(/[^a-z0-9]+/gi, '-')
     .replace(/^-|-$/g, '')
@@ -38,20 +38,24 @@ export function stringHash(str: string) {
 export function truncate(text: string, length: number, options: TruncateOptions) {
   const {
     omission = ' … ',
-    anchor   = 'start',
+    anchor = 'start',
   } = options
 
   if (text.length <= length) { return text }
 
   const lengthPre =
-    anchor === 'start' ? 0 :
-    anchor === 'end' ? length :
-    Math.ceil(length / 2 - omission.length / 2)
+    anchor === 'start'
+      ? 0
+      : anchor === 'end'
+        ? length
+        : Math.ceil(length / 2 - omission.length / 2)
 
   const lengthPost =
-    anchor === 'start' ? 0 :
-    anchor === 'end' ? length :
-    Math.floor(length / 2 - omission.length / 2)
+    anchor === 'start'
+      ? 0
+      : anchor === 'end'
+        ? length
+        : Math.floor(length / 2 - omission.length / 2)
 
   return text.slice(0, lengthPre) + omission + text.slice(-lengthPost)
 }

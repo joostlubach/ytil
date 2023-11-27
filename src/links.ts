@@ -1,7 +1,7 @@
 const PROTOCOL_REGEXP = /^(?:https?|mailto|ftp|tel):(\w|\/)/i
-const EMAIL_REGEXP    = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}])|(([\w\-\d]+\.)+[\w]{2,}))$/i
-const WEB_REGEXP      = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i
-const PHONE_REGEXP    = /^\s*[-+()\d\s]{3,}\s*$/i
+const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}])|(([\w\-\d]+\.)+[\w]{2,}))$/i
+const WEB_REGEXP = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i
+const PHONE_REGEXP = /^\s*[-+()\d\s]{3,}\s*$/i
 
 /**
  * Finds a single link in a text and returns it.

@@ -1,6 +1,6 @@
-export class NestedWeakMap<Keys extends [any, ...any[]], Value> {
+export class NestedWeakMap<Keys extends [object, ...object[]], Value> {
 
-  private readonly _map = new WeakMap<any, any>()
+  private readonly _map = new WeakMap<object, unknown>()
   public get map() { return this._map }
 
   public get(...keys: Keys): Value | undefined {
@@ -8,26 +8,26 @@ export class NestedWeakMap<Keys extends [any, ...any[]], Value> {
     const tail = head.pop()!
 
     const leaf = this.resolveLeaf(head, false)
-    return leaf?.get(tail)
+    return leaf?.get(tail) as Value | undefined
   }
 
   public set(...args: [...Keys, Value]): void {
-    const head  = [...args] as any as Keys
+    const head = [...args] as unknown as Keys
     const value = head.pop()! as Value
-    const tail  = head.pop()! as Keys[number]
+    const tail = head.pop()! as Keys[number]
 
     const leaf = this.resolveLeaf(head, true)
     leaf.set(tail, value)
   }
 
   public ensure(...args: [...Keys, () => Value]): Value {
-    const head   = [...args] as any as Keys
+    const head = [...args] as unknown as Keys
     const defVal = head.pop()! as () => Value
-    const tail   = head.pop()! as Keys[number]
+    const tail = head.pop()! as Keys[number]
 
     const leaf = this.resolveLeaf(head, true)
 
-    let value = leaf.get(tail)
+    let value = leaf.get(tail) as Value | undefined
     if (value == null) {
       leaf.set(tail, value = defVal())
     }
@@ -40,16 +40,14 @@ export class NestedWeakMap<Keys extends [any, ...any[]], Value> {
 
     const leaf = this.resolveLeaf(head, false)
     leaf?.delete(tail)
-
-    this.cleanUp(head)
   }
 
-  private resolveLeaf(keys: Keys, create: true): Map<any, any>
-  private resolveLeaf(keys: Keys, create: false): Map<any, any> | undefined
+  private resolveLeaf(keys: Keys, create: true): Map<unknown, unknown>
+  private resolveLeaf(keys: Keys, create: false): Map<unknown, unknown> | undefined
   private resolveLeaf(keys: Keys, create: boolean) {
     let current = this._map
     for (const key of keys) {
-      let next = current.get(key)
+      let next = current.get(key) as WeakMap<object, unknown>
       if (next == null && !create) {
         return undefined
       }
@@ -61,20 +59,6 @@ export class NestedWeakMap<Keys extends [any, ...any[]], Value> {
     }
 
     return current
-  }
-
-  private cleanUp(keys: Keys) {
-    let current = this._map
-    for (const key of keys) {
-      const next = current.get(key)
-      if (next == null) { break }
-      if (next.size === 0) {
-        // We found a map with size 0. Just remove it from here.
-        current.delete(key)
-      }
-
-      current = next
-    }
   }
 
 }

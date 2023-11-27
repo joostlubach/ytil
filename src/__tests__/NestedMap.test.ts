@@ -1,13 +1,12 @@
 import { NestedMap } from '../NestedMap'
 
-describe("NestedMap", () => {
-
-  it("should allow creating a NestedMap", () => {
+describe('NestedMap', () => {
+  it('should allow creating a NestedMap', () => {
     const map = new NestedMap()
     expect(map).toBeInstanceOf(NestedMap)
   })
 
-  it("should allow using multiple keys to read from and write to the map", () => {
+  it('should allow using multiple keys to read from and write to the map', () => {
     const map = new NestedMap<[string, number], string>()
 
     map.set('foo', 1, 'bar')
@@ -28,7 +27,7 @@ describe("NestedMap", () => {
     expect(map.get('unknown', 3)).toEqual(undefined)
   })
 
-  it("should have an ensure function that gets an item and adds it if not found", () => {
+  it('should have an ensure function that gets an item and adds it if not found', () => {
     const map = new NestedMap<[string, number], string>()
     map.set('foo', 1, 'bar')
 
@@ -39,7 +38,7 @@ describe("NestedMap", () => {
     expect(map.get('foo', 2)).toEqual('baz')
   })
 
-  it("should allow deleting items", () => {
+  it('should allow deleting items', () => {
     const map = new NestedMap<[string, number], string>()
 
     map.set('foo', 1, 'bar')
@@ -54,7 +53,7 @@ describe("NestedMap", () => {
     expect(map.get('bar', 1)).toBeUndefined()
   })
 
-  it("should for good measure remove any empty nested maps", () => {
+  it('should for good measure remove unknown empty nested maps', () => {
     const map = new NestedMap<[string, number], string>()
 
     map.set('foo', 1, 'bar')
@@ -67,13 +66,13 @@ describe("NestedMap", () => {
         new Map([
           [1, 'bar'],
           [2, 'baz'],
-        ])
+        ]),
       ],
       [
         'bar',
         new Map([
           [1, 'foo'],
-        ])
+        ]),
       ],
     ]))
 
@@ -84,13 +83,12 @@ describe("NestedMap", () => {
       [
         'foo',
         new Map([
-          [1, 'bar']
-        ])
+          [1, 'bar'],
+        ]),
       ],
     ]))
 
     map.delete('foo', 1)
     expect(map.map).toEqual(new Map())
   })
-
 })

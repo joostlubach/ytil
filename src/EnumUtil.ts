@@ -1,4 +1,5 @@
 import { every } from 'lodash'
+import { objectValues } from './lodashext'
 
 /**
  * Generic utility for enum introspection.
@@ -22,16 +23,16 @@ export abstract class EnumUtil {
       return Object.keys(Enum)
     } else {
       const count = Object.keys(Enum).length
-      return Object.values(Enum).slice(0, count / 2) as string[]
+      return objectValues(Enum).slice(0, count / 2) as string[]
     }
   }
 
   public static values<E extends AnyEnumType>(Enum: E): EnumValue<E>[] {
     if (this.isStringEnum(Enum)) {
-      return Object.values(Enum)
+      return objectValues(Enum) as EnumValue<E>[]
     } else {
       const count = Object.keys(Enum).length
-      return Object.values(Enum).slice(count / 2) as EnumValue<E>[]
+      return objectValues(Enum).slice(count / 2) as EnumValue<E>[]
     }
   }
 
@@ -42,8 +43,8 @@ export abstract class EnumUtil {
     )
   }
 
-  public static coerce<E extends AnyEnumType>(Enum: E, value: any): EnumValue<E> | undefined {
-    if (this.values(Enum).includes(value)) {
+  public static coerce<E extends AnyEnumType>(Enum: E, value: unknown): EnumValue<E> | undefined {
+    if (this.values(Enum).includes(value as EnumValue<E>)) {
       return value as EnumValue<E>
     }
   }
@@ -58,16 +59,15 @@ export type EnumTypeOf<V extends string | number> =
   V extends string ? Record<string, V> : never
 
 /**
- * Catch-all for any enum.
+ * Catch-all for unknown enum.
  */
-export type AnyEnumType = EnumTypeOf<any>
+export type AnyEnumType = EnumTypeOf<string | number>
 
 /**
  * Extract enum names.
  */
 export type EnumName<E extends AnyEnumType> =
-  E extends Record<infer T, any> ? T : never
-
+  E extends Record<infer T, unknown> ? T : never
 
 /**
  * Extract enum value.

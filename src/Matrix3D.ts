@@ -7,7 +7,7 @@ export class Matrix3D {
       this.values = values as number[][]
       for (const row of this.values) {
         if (row.length !== 4) {
-          throw new RangeError("Matrix3D must have 4 columns")
+          throw new RangeError('Matrix3D must have 4 columns')
         }
       }
     } else if (values.length === 16) {
@@ -18,7 +18,7 @@ export class Matrix3D {
         (values as number[]).slice(12, 16),
       ]
     } else {
-      throw new RangeError("Values be either 4 rows or 16 values")
+      throw new RangeError('Values be either 4 rows or 16 values')
     }
   }
 

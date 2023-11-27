@@ -15,12 +15,12 @@ export abstract class MapUtil {
 
   public static ensure<K, V>(map: Map<K, V>, key: K, defaultValue: () => V): V
   public static ensure<K extends object, V>(map: WeakMap<K, V>, key: K, defaultValue: () => V): V
-  public static ensure(map: Map<any, any> | WeakMap<any, any>, key: any, defaultValue: () => any) {
-    const value = map.get(key)
+  public static ensure(map: Map<unknown, unknown> | WeakMap<object, unknown>, key: object | unknown, defaultValue: () => unknown) {
+    const value = map.get(key as object)
     if (value !== undefined) { return value }
 
     const newValue = defaultValue()
-    map.set(key, newValue)
+    map.set(key as object, newValue)
     return newValue
   }
 

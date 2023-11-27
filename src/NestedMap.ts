@@ -1,6 +1,6 @@
-export class NestedMap<Keys extends [any, ...any[]], Value> {
+export class NestedMap<Keys extends [unknown, ...unknown[]], Value> {
 
-  private readonly _map = new Map<any, any>()
+  private readonly _map = new Map<unknown, unknown>()
   public get map() { return this._map }
 
   public has(...keys: Keys): boolean {
@@ -16,26 +16,26 @@ export class NestedMap<Keys extends [any, ...any[]], Value> {
     const tail = head.pop()!
 
     const leaf = this.resolveLeaf(head, false)
-    return leaf?.get(tail)
+    return leaf?.get(tail) as Value | undefined
   }
 
   public set(...args: [...Keys, Value]): void {
-    const head  = [...args] as any as Keys
+    const head = [...args] as unknown as Keys
     const value = head.pop()! as Value
-    const tail  = head.pop()! as Keys[number]
+    const tail = head.pop()! as Keys[number]
 
     const leaf = this.resolveLeaf(head, true)
     leaf.set(tail, value)
   }
 
   public ensure(...args: [...Keys, () => Value]): Value {
-    const head   = [...args] as any as Keys
+    const head = [...args] as unknown as Keys
     const defVal = head.pop()! as () => Value
-    const tail   = head.pop()! as Keys[number]
+    const tail = head.pop()! as Keys[number]
 
     const leaf = this.resolveLeaf(head, true)
 
-    let value = leaf.get(tail)
+    let value = leaf.get(tail) as Value | undefined
     if (value == null) {
       leaf.set(tail, value = defVal())
     }
@@ -56,12 +56,12 @@ export class NestedMap<Keys extends [any, ...any[]], Value> {
     this.map.clear()
   }
 
-  private resolveLeaf(keys: Keys, create: true): Map<any, any>
-  private resolveLeaf(keys: Keys, create: false): Map<any, any> | undefined
+  private resolveLeaf(keys: Keys, create: true): Map<unknown, unknown>
+  private resolveLeaf(keys: Keys, create: false): Map<unknown, unknown> | undefined
   private resolveLeaf(keys: Keys, create: boolean) {
     let current = this._map
     for (const key of keys) {
-      let next = current.get(key)
+      let next = current.get(key) as Map<unknown, unknown>
       if (next == null && !create) {
         return undefined
       }
@@ -79,7 +79,7 @@ export class NestedMap<Keys extends [any, ...any[]], Value> {
     let current = this._map
     for (const key of keys) {
       const next = current.get(key)
-      if (next == null) { break }
+      if (!(next instanceof Map)) { break }
       if (next.size === 0) {
         // We found a map with size 0. Just remove it from here.
         current.delete(key)

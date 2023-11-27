@@ -1,8 +1,8 @@
-const ids: WeakMap<any, number> = new WeakMap()
+const ids: WeakMap<object, number> = new WeakMap()
 
 let nextID = 0
 
-export function objectID(obj: any) {
+export function objectID(obj: unknown) {
   if (obj == null) { return obj }
   if (typeof obj !== 'object' && typeof obj !== 'function') { return obj }
 

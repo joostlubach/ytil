@@ -1,8 +1,8 @@
 export function rectsIntersect(rect1: LayoutRect | Rect, rect2: LayoutRect | Rect) {
-  const x1 = (rect1 as any).left ?? (rect1 as any).x
-  const y1 = (rect1 as any).top ?? (rect1 as any).y
-  const x2 = (rect2 as any).left ?? (rect2 as any).x
-  const y2 = (rect2 as any).top ?? (rect2 as any).y
+  const x1 = (rect1 as LayoutRect).left ?? (rect1 as Rect).x
+  const y1 = (rect1 as LayoutRect).top ?? (rect1 as Rect).y
+  const x2 = (rect2 as LayoutRect).left ?? (rect2 as Rect).x
+  const y2 = (rect2 as LayoutRect).top ?? (rect2 as Rect).y
   const w1 = rect1.width
   const h1 = rect1.height
   const w2 = rect2.width
@@ -18,9 +18,9 @@ export function rectsIntersect(rect1: LayoutRect | Rect, rect2: LayoutRect | Rec
 
 export function offsetBounds(bounds: LayoutRect, delta: Point) {
   return {
-    left: bounds.left + delta.x,
-    top: bounds.top + delta.y,
-    width: bounds.width,
+    left:   bounds.left + delta.x,
+    top:    bounds.top + delta.y,
+    width:  bounds.width,
     height: bounds.height,
   }
 }
@@ -29,24 +29,24 @@ export function expandRect(rect: Rect, insets: number | Partial<Insets>) {
   const inset = (prop: keyof Insets) => typeof insets === 'number' ? insets : (insets[prop] ?? 0)
 
   return {
-    x: rect.x - inset('left'),
-    y: rect.y - inset('top'),
-    width: rect.width + inset('left') + inset('right'),
+    x:      rect.x - inset('left'),
+    y:      rect.y - inset('top'),
+    width:  rect.width + inset('left') + inset('right'),
     height: rect.height + inset('top') + inset('bottom'),
   }
 }
 
 export function rectExtents(rect: Rect): Point[] {
   return [
-    { x: rect.x, y: rect.y },
-    { x: rect.x + rect.width, y: rect.y },
-    { x: rect.x + rect.width, y: rect.y + rect.height },
-    { x: rect.x, y: rect.y + rect.height },
+    {x: rect.x, y: rect.y},
+    {x: rect.x + rect.width, y: rect.y},
+    {x: rect.x + rect.width, y: rect.y + rect.height},
+    {x: rect.x, y: rect.y + rect.height},
   ]
 }
 
 export function resizeBoundsBy(bounds: LayoutRect, handlePoint: Point, delta: Point, options: ResizeBoundsOptions = {}) {
-  const { roundTo, minimumWidth = 0, minimumHeight = 0 } = options
+  const {roundTo, minimumWidth = 0, minimumHeight = 0} = options
 
   const round = (num: number) => roundTo == null ? num : Math.round(num / roundTo) * roundTo
 
@@ -58,15 +58,15 @@ export function resizeBoundsBy(bounds: LayoutRect, handlePoint: Point, delta: Po
   return {
     left,
     top,
-    width: Math.max(right - left, minimumWidth),
+    width:  Math.max(right - left, minimumWidth),
     height: Math.max(bottom - top, minimumHeight),
   }
 }
 
 export function resizeBoundsTo(bounds: LayoutRect, handlePoint: Point, size: Size, options: ResizeBoundsOptions = {}) {
-  const { roundTo, minimumWidth = 0, minimumHeight = 0 } = options
+  const {roundTo, minimumWidth = 0, minimumHeight = 0} = options
 
-  const nextBounds = { ...bounds }
+  const nextBounds = {...bounds}
   const round = (num: number) => roundTo == null ? num : Math.round(num / roundTo) * roundTo
 
   const nextWidth = Math.max(size.width, minimumWidth)
@@ -99,33 +99,33 @@ export interface Point {
 }
 
 export interface Size {
-  width: number
+  width:  number
   height: number
 }
 
 export interface Insets {
-  top: number
-  right: number
+  top:    number
+  right:  number
   bottom: number
-  left: number
+  left:   number
 }
 
 export interface Rect {
-  x: number
-  y: number
-  width: number
+  x:      number
+  y:      number
+  width:  number
   height: number
 }
 
 export interface ResizeBoundsOptions {
-  roundTo?: number
-  minimumWidth?: number
+  roundTo?:       number
+  minimumWidth?:  number
   minimumHeight?: number
 }
 
 export interface LayoutRect {
-  top: number
-  left: number
-  width: number
+  top:    number
+  left:   number
+  width:  number
   height: number
 }

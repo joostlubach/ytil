@@ -11,9 +11,9 @@ export function camelCaseKey(key: string | number | symbol) {
   const keyString = String(key)
 
   let remaining = keyString
-  let current   = ''
-  let result    = ''
-  let match     = keyString.match(re)
+  let current = ''
+  let result = ''
+  let match = keyString.match(re)
 
   const appendPart = (part: string) => {
     if (remaining === key) {
@@ -29,9 +29,9 @@ export function camelCaseKey(key: string | number | symbol) {
     current += remaining.slice(0, match.index!).toLowerCase()
     appendPart(current)
 
-    current   = match[0].replace(/[^a-zA-Z0-9]/ig, '')
+    current = match[0].replace(/[^a-zA-Z0-9]/ig, '')
     remaining = remaining.slice(match.index! + match[0].length)
-    match     = remaining.match(re)
+    match = remaining.match(re)
   }
 
   appendPart(current + remaining)

@@ -1,7 +1,7 @@
-import { isArray } from 'lodash'
+import { isArray, isObject } from 'lodash'
 
-export function getFlattened<T>(target: T, path: string): any[] | any {
-  const tree: any[] | any = target
+export function getFlattened<T>(target: T, path: string): unknown[] | unknown {
+  const tree: unknown[] | unknown = target
 
   let current = tree
   for (const segment of path.split('.')) {
@@ -9,15 +9,15 @@ export function getFlattened<T>(target: T, path: string): any[] | any {
 
     if (isArray(current)) {
       current = flatten(current.map(item => item[segment.trim()]))
-    } else {
-      current = current[segment.trim()]
+    } else if (isObject(current)) {
+      current = (current as Record<string, unknown>)[segment.trim()]
     }
   }
 
   return current
 }
 
-export function setFlattened<T>(target: T, path: string, values: any | any[]) {
+export function setFlattened<T>(target: T, path: string, values: unknown | unknown[]) {
   const head = path.split('.')
   const tail = head.pop()!
 
@@ -25,19 +25,19 @@ export function setFlattened<T>(target: T, path: string, values: any | any[]) {
   if (isArray(values) && isArray(targets) && targets.length === values.length) {
     for (let i = 0; i < targets.length; i++) {
       const target = targets[i]
-      const value  = values[i]
+      const value = values[i]
       target[tail] = value
     }
-  } else if (!isArray(targets)) {
-    targets[tail] = values
-  } else {
+  } else if (isArray(targets)) {
     // TODO: This should not happen - perhaps warning?
     targets[0][tail] = values
+  } else if (isObject(targets)) {
+    (targets as Record<string, unknown>)[tail] = values
   }
 }
 
-function flatten(tree: any[]): any[] {
-  const flatten = (tree: any[], result: any[]) => {
+function flatten(tree: unknown[]): unknown[] {
+  const flatten = (tree: unknown[], result: unknown[]) => {
     for (const item of tree) {
       if (isArray(item)) {
         flatten(item, result)
@@ -47,7 +47,7 @@ function flatten(tree: any[]): any[] {
     }
   }
 
-  const result: any[] = []
+  const result: unknown[] = []
   flatten(tree, result)
   return result
 }

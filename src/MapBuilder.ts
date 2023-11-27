@@ -7,8 +7,8 @@ export abstract class MapBuilder {
   public static by<It, K, V = It>(items: It[], keyForItem: (item: It) => K, valueForItem?: (value: It) => V): Map<K, V> {
     const result = new Map<K, V>()
     for (const item of items) {
-      const key   = keyForItem(item)
-      const value = valueForItem == null ? (item as any as V) : valueForItem(item)
+      const key = keyForItem(item)
+      const value = valueForItem == null ? (item as unknown as V) : valueForItem(item)
       result.set(key, value)
     }
     return result
@@ -20,9 +20,9 @@ export abstract class MapBuilder {
     const result = new Map<K, V[]>()
 
     for (const item of items) {
-      const key   = keyForItem(item)
-      const keys  = isArray(key) ? key : [key]
-      const value = valueForItem == null ? (item as any as V) : valueForItem(item)
+      const key = keyForItem(item)
+      const keys = isArray(key) ? key : [key]
+      const value = valueForItem == null ? (item as unknown as V) : valueForItem(item)
 
       for (const key of keys) {
         const resultItem = result.get(key) ?? []
