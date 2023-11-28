@@ -1,5 +1,6 @@
 import { isArray, isEqual, isFunction } from 'lodash'
-import { isPlainObject, isObject, objectEntries } from './lodashext'
+
+import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
 import { ObjectKey, UnknownObject } from './types'
 
 export function emptyObject() {
@@ -9,13 +10,13 @@ export function emptyObject() {
 // ------
 // objectEquals
 
-export function objectEquals(left: UnknownObject | null | undefined, right: UnknownObject | null | undefined, equals: (a: unknown, b: unknown) => boolean = isEqual): boolean {
+export function objectEquals<O extends object>(left: O | null | undefined, right: O | null | undefined, equals: (a: unknown, b: unknown) => boolean = isEqual): boolean {
   if (left == null) { return right == null }
   if (right == null) { return false }
 
   if (Object.keys(left).length !== Object.keys(right).length) { return false }
 
-  for (const key of Object.keys(left)) {
+  for (const key of objectKeys(left)) {
     if (!equals(left[key], right[key])) {
       return false
     }
@@ -27,9 +28,9 @@ export function objectEquals(left: UnknownObject | null | undefined, right: Unkn
 // ------
 // modifyObject
 
-export function modifyObject<T extends UnknownObject>(root: T, path: string, modifier: (value: unknown) => unknown): T
-export function modifyObject<T extends UnknownObject>(root: T[], path: string, modifier: (value: unknown) => unknown): T[]
-export function modifyObject<T extends UnknownObject>(root: T | T[], path: string, modifier: (value: unknown) => unknown): T | T[]
+export function modifyObject<T extends object>(root: T, path: string, modifier: (value: unknown) => unknown): T
+export function modifyObject<T extends object>(root: T[], path: string, modifier: (value: unknown) => unknown): T[]
+export function modifyObject<T extends object>(root: T | T[], path: string, modifier: (value: unknown) => unknown): T | T[]
 export function modifyObject(root: UnknownObject | UnknownObject[], path: string, modifier: (value: unknown) => unknown) {
   const segments = path.split('.').filter(Boolean)
   return modify(root, segments, modifier)

@@ -1,4 +1,5 @@
 import { every } from 'lodash'
+
 import { objectValues } from './lodashext'
 
 /**
