@@ -1,8 +1,8 @@
 export type AnyFunction = (...args: any[]) => any
 export type Constructor<T, A extends any[] = any[]> = new (...args: A) => T
+export type AbstractConstructor<T, A extends any[] = any[]> = abstract new (...args: A) => T
 export type AnyConstructor = Constructor<unknown>
 
-export type InstanceOf<C> = C extends Constructor<infer T> ? T : never
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends Record<ObjectKey, unknown> ? DeepPartial<T[K]> : T[K]
 }
