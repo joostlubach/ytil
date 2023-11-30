@@ -4,7 +4,7 @@ export type AbstractConstructor<T, A extends any[] = any[]> = abstract new (...a
 export type AnyConstructor = Constructor<unknown>
 
 export type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends Record<ObjectKey, unknown> ? DeepPartial<T[K]> : T[K]
+  [K in keyof T]?: T[K] extends Record<any, any> ? DeepPartial<T[K]> : T[K]
 }
 export type SomePartial<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
