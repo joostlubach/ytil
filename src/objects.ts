@@ -159,6 +159,39 @@ export function deepMapValues(arg: unknown, fn: (value: unknown) => unknown): un
   }
 }
 
+export async function deepMapKeysAsync<O>(arg: O, fn: (key: ObjectKey) => Promise<ObjectKey>): Promise<object> {
+  const visit = async (arg: unknown): Promise<unknown> => {
+    if (isArray(arg)) {
+      return await Promise.all(arg.map(it => deepMapKeysAsync(it, fn)))
+    } else if (isObject(arg)) {
+      const result: UnknownObject = {}
+      for (const [attribute, value] of objectEntries(arg)) {
+        if (!isObject(value)) { continue }
+        result[await fn(attribute)] = deepMapKeysAsync(value, fn)
+      }
+      return result
+    } else {
+      return arg
+    }
+  }
+
+  return visit(arg) as object
+}
+
+export async function deepMapValuesAsync(arg: unknown, fn: (value: unknown) => Promise<unknown>): Promise<unknown> {
+  if (isPlainObject(arg)) {
+    const result: UnknownObject = {}
+    for (const [attribute, value] of objectEntries(arg)) {
+      result[attribute] = await deepMapValuesAsync(value, fn)
+    }
+    return result
+  } else if (isArray(arg)) {
+    return await Promise.all(arg.map(it => deepMapValuesAsync(it, fn)))
+  } else {
+    return await fn(arg)
+  }
+}
+
 // ------
 // Methods
 
