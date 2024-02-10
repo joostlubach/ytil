@@ -35,4 +35,12 @@ export abstract class MapBuilder {
     return result
   }
 
+  public static setDefault<K, V>(map: Map<K, V>, key: K, defaultValue: V): V {
+    const value = map.get(key)
+    if (value != null) { return value }
+
+    map.set(key, defaultValue)
+    return defaultValue
+  }
+
 }
