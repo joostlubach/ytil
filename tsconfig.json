@@ -13,8 +13,6 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "rootDir": "src"
   },
