@@ -6,7 +6,7 @@ import {
   values as _values,
 } from 'lodash'
 
-import { UnknownObject } from './types.js'
+import { UnknownObject } from './types'
 
 /**
  * This file contains some Lodash methods with slightly stricter typing.

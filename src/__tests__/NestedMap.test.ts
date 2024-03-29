@@ -1,4 +1,4 @@
-import { NestedMap } from '../NestedMap.js'
+import { NestedMap } from '../NestedMap'
 
 describe('NestedMap', () => {
   it('should allow creating a NestedMap', () => {

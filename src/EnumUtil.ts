@@ -1,6 +1,6 @@
 import { every } from 'lodash'
 
-import { objectValues } from './lodashext.js'
+import { objectValues } from './lodashext'
 
 /**
  * Generic utility for enum introspection.
