@@ -1,6 +1,6 @@
 import { range } from 'lodash'
 
-import { Point } from './geometry.js'
+import { Point } from './geometry'
 
 export interface SVGPathOptions {
   roundCorners?: number | number[]

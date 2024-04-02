@@ -1,4 +1,4 @@
-import { AbstractConstructor, AnyConstructor, Constructor } from './types.js'
+import { AbstractConstructor, AnyConstructor, Constructor } from './types'
 
 export function resolveConstructor(arg: any) {
   if (typeof arg === 'function' && arg.prototype != null) {
