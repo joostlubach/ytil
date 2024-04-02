@@ -1,4 +1,4 @@
-import { stringHash } from './text'
+import { stringHash } from './text.js'
 
 // Stolen & adapted from https://github.com/coverslide/node-alea.
 // Which was adapted from a version by Johannes Baagøe <baagoe@baagoe.com>, 2010

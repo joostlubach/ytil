@@ -5,6 +5,7 @@
   "author": "Joost Lubach",
   "license": "MIT",
   "type": "module",
+  "type": "module",
   "scripts": {
     "build": "pnpm clean && pnpm build:tsc",
     "build:tsc": "tsc -p tsconfig.prod.json",

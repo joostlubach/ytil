@@ -1,7 +1,7 @@
 import { isArray, isEqual, isFunction } from 'lodash'
 
-import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
-import { ObjectKey, UnknownObject } from './types'
+import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext.js'
+import { ObjectKey, UnknownObject } from './types.js'
 
 export function emptyObject() {
   return {}

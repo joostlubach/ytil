@@ -1,4 +1,4 @@
-import { cleanTextValue } from './text'
+import { cleanTextValue } from './text.js'
 
 export type InitialsDerivable =
   | string
