@@ -37,30 +37,44 @@ export function stringHash(str: string) {
 
 export function truncate(text: string, length: number, options: TruncateOptions) {
   const {
-    omission = ' … ',
+    ellipsis = ' … ',
     anchor = 'start',
   } = options
 
   if (text.length <= length) { return text }
 
-  const lengthPre =
-    anchor === 'start'
-      ? 0
-      : anchor === 'end'
-        ? length
-        : Math.ceil(length / 2 - omission.length / 2)
+  let lengthStart = 0
+  let lengthEnd = 0
 
-  const lengthPost =
-    anchor === 'start'
-      ? 0
-      : anchor === 'end'
-        ? length
-        : Math.floor(length / 2 - omission.length / 2)
+  switch (anchor) {
+  case TextAnchor.Start:
+    // Text is anchored at the start, get all the characters from the start.
+    lengthStart = length - ellipsis.length
+    lengthEnd = 0
+    break
+  case TextAnchor.End:
+    // Text is anchored at the end, get all the characters from the end.
+    lengthStart = 0
+    lengthEnd = length - ellipsis.length
+    break
+  case TextAnchor.Middle:
+    // Text is anchored at the middle. Get as many characters from the start and the end.
+    // In case of odd length, the start gets the extra character.
+    lengthStart = Math.ceil(length / 2 - ellipsis.length / 2)
+    lengthEnd = Math.floor(length / 2 - ellipsis.length / 2)
+    break
+  }
 
-  return text.slice(0, lengthPre) + omission + text.slice(-lengthPost)
+  return text.slice(0, lengthStart) + ellipsis + text.slice(-lengthEnd)
 }
 
 export interface TruncateOptions {
-  omission?: string
-  anchor?:   'start' | 'middle' | 'end'
+  ellipsis?: string
+  anchor?:   TextAnchor
+}
+
+export enum TextAnchor {
+  Start,
+  Middle,
+  End
 }
