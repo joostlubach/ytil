@@ -57,7 +57,7 @@ export abstract class EnumUtil {
  */
 export type EnumTypeOf<V extends string | number> =
   V extends number ? Record<string, V> & Record<V, string> :
-  V extends string ? Record<string, V> : never
+    V extends string ? Record<string, V> : never
 
 /**
  * Catch-all for unknown enum.
@@ -78,5 +78,5 @@ export type EnumName<E extends AnyEnumType> =
  */
 export type EnumValue<E extends AnyEnumType> =
   E extends Record<string, infer T extends string> ? T :
-  E extends Record<string, infer T> ? Exclude<T, string> :
-  never
+    E extends Record<string, infer T> ? Exclude<T, string> :
+      never

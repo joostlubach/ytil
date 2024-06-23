@@ -28,10 +28,10 @@ export function byteSize(size: number | string) {
   const unit = match[2].toLowerCase()
 
   switch (unit) {
-    case 'b': return value
-    case 'kb': return value * 1024
-    case 'mb': return value * 1024 ** 2
-    case 'gb': return value * 1024 ** 3
-    default: throw new Error(`Invalid byte size: ${size}`)
+  case 'b': return value
+  case 'kb': return value * 1024
+  case 'mb': return value * 1024 ** 2
+  case 'gb': return value * 1024 ** 3
+  default: throw new Error(`Invalid byte size: ${size}`)
   }
 }
