@@ -17,6 +17,7 @@
     "build:tsc:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir dist/cjs --declaration false --declarationMap false",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "lint": "eslint src --ext ts,tsx",
+    "check": "tsc --noEmit",
     "test": "bun run test"
   },
   "dependencies": {
