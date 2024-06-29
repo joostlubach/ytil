@@ -1,5 +1,4 @@
 import { isArray, isEqual, isFunction } from 'lodash'
-
 import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
 import { ObjectKey, UnknownObject } from './types'
 

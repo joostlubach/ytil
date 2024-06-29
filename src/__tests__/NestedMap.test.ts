@@ -1,7 +1,8 @@
-import {} from 'bun:test'
+import { describe, expect, it } from 'bun:test'
 import { NestedMap } from '../NestedMap'
 
 describe('NestedMap', () => {
+
   it('should allow creating a NestedMap', () => {
     const map = new NestedMap()
     expect(map).toBeInstanceOf(NestedMap)
@@ -20,12 +21,12 @@ describe('NestedMap', () => {
     expect(map.get('bar', 1)).toEqual('foo')
     expect(map.get('baz', 2)).toEqual('foo')
 
-    expect(map.get('foo', 3)).toEqual(undefined)
-    expect(map.get('bar', 3)).toEqual(undefined)
-    expect(map.get('baz', 3)).toEqual(undefined)
+    expect(map.get('foo', 3)).toBeUndefined()
+    expect(map.get('bar', 3)).toBeUndefined()
+    expect(map.get('baz', 3)).toBeUndefined()
 
-    expect(map.get('unknown', 1)).toEqual(undefined)
-    expect(map.get('unknown', 3)).toEqual(undefined)
+    expect(map.get('unknown', 1)).toBeUndefined()
+    expect(map.get('unknown', 3)).toBeUndefined()
   })
 
   it('should have an ensure function that gets an item and adds it if not found', () => {
@@ -92,4 +93,5 @@ describe('NestedMap', () => {
     map.delete('foo', 1)
     expect(map.map).toEqual(new Map())
   })
+  
 })

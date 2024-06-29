@@ -1,5 +1,4 @@
 import { range } from 'lodash'
-
 import { Point } from './geometry'
 
 export interface SVGPathOptions {
