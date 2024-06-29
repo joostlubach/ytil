@@ -1,3 +1,4 @@
+import {} from 'bun:test'
 import { NestedMap } from '../NestedMap'
 
 describe('NestedMap', () => {

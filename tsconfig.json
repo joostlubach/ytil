@@ -15,7 +15,8 @@
     "module": "ESNext",
     "moduleResolution": "Node10",
     "isolatedModules": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "types": ["bun-types"]
   },
   "include": [
     "src"

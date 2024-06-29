@@ -1,38 +1,23 @@
 {
-  "name": "@joostlubach/ytil",
+  "name": "ytil",
   "version": "1.0.1",
   "description": "Utility stuff that I use a lot",
   "author": "Joost Lubach",
   "private": false,
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./src/index.ts",
   "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/cjs/index.js"
-    },
-    "./*": {
-      "types": "./dist/types/*.d.ts",
-      "import": "./dist/esm/*.js",
-      "default": "./dist/cjs/*.js"
-    }
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
   },
   "scripts": {
     "build": "npm clean && npm build:tsc",
     "build:tsc": "npm build:tsc:esm && npm build:tsc:cjs",
     "build:tsc:esm": "tsc -p tsconfig.prod.json --module esnext --outDir dist/esm --declarationDir dist/types",
     "build:tsc:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir dist/cjs --declaration false --declarationMap false",
-    "postinstall": "npm run build",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "lint": "eslint src --ext ts,tsx",
-    "check": "tsc -p . --noEmit",
-    "test": "NODE_ENV=test jest"
-  },
-  "peerDependencies": {
-    "typescript": "*"
+    "test": "bun run test"
   },
   "dependencies": {
     "error-polyfill": "^0.1.3",
