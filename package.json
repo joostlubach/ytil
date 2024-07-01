@@ -11,11 +11,6 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "build": "npm clean && npm build:tsc",
-    "build:tsc": "npm build:tsc:esm && npm build:tsc:cjs",
-    "build:tsc:esm": "tsc -p tsconfig.prod.json --module esnext --outDir dist/esm --declarationDir dist/types",
-    "build:tsc:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir dist/cjs --declaration false --declarationMap false",
-    "clean": "rimraf dist tsconfig.tsbuildinfo",
     "lint": "eslint src --ext ts,tsx",
     "check": "tsc --noEmit",
     "test": "bun run test"
