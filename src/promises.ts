@@ -1,4 +1,4 @@
-import { isFunction } from 'lodash'
+import { isFunction } from 'ytil'
 
 export function isPromise<R>(arg: unknown, strict: false): arg is PromiseLike<R>
 export function isPromise<R>(arg: unknown, strict?: true): arg is Promise<R>

@@ -1,4 +1,4 @@
-import { escapeRegExp, isFunction } from 'lodash'
+import { escapeRegExp } from 'lodash'
 
 export interface PatternToRegExpOptions {
   anchor?:    boolean | 'start' | 'end'
