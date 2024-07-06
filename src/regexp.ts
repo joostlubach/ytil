@@ -1,5 +1,7 @@
 import { escapeRegExp } from 'lodash'
 
+import { isFunction } from './functions'
+
 export interface PatternToRegExpOptions {
   anchor?:    boolean | 'start' | 'end'
   wildcards?: boolean
