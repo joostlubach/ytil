@@ -1,4 +1,3 @@
-import { objectKeys } from './lodashext'
 
 export function isFunction<F extends(...args: any[]) => any>(value: any): value is F {
   return typeof value === 'function'
@@ -11,16 +10,25 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
     return true
   }
 
-  for (const key of objectKeys(obj)) {
-    if (!isFunction(obj[key])) { continue }
-    if (!isIncluded(key)) { continue }
+  let current = obj
 
-    const prop = Object.getOwnPropertyDescriptor(obj, key)
+  while (current != null && current !== Object.prototype) {
+    const keys = [...Object.getOwnPropertyNames(current), ...Object.getOwnPropertySymbols(current)]
+    for (const key of keys) {
+      if (!isIncluded(key)) { continue }
 
-    Object.defineProperty(obj, key, {
-      ...prop,
-      value: obj[key].bind(obj),
-    })
+      const prop = Object.getOwnPropertyDescriptor(current, key)
+      if (prop == null) { continue }
+      if (!isFunction(prop.value)) { continue }
+
+      Object.defineProperty(obj, key, {
+        ...prop,
+        value: prop.value.bind(obj),
+      })
+    }
+
+    if (options.recurse === false && current !== obj) { break }
+    current = Object.getPrototypeOf(current)
   }
 }
 
@@ -34,6 +42,7 @@ function filterContains(filter: string[] | RegExp, key: string | number | symbol
 }
 
 export interface BindMethodOptions {
-  only?:   string[] | RegExp
-  except?: string[] | RegExp
+  only?:    string[] | RegExp
+  except?:  string[] | RegExp
+  recurse?: boolean
 }
