@@ -1,5 +1,6 @@
 import {
   entries as _entries,
+  flatMap as _flatMap,
   isObject as _isObject,
   isPlainObject as _isPlainObject,
   keys as _keys,
@@ -16,3 +17,4 @@ export const isObject = _isObject as <T extends object>(obj: unknown) => obj is 
 export const objectKeys = _keys as <T>(obj: T) => Array<keyof T>
 export const objectValues = _values as <T>(obj: T) => Array<T[keyof T]>
 export const objectEntries = _entries as <T>(obj: T) => Array<[keyof T, T[keyof T]]>
+export const flatMap = _flatMap as <T, U>(array: T[], iteratee: (value: T, index: number) => U[]) => U[]

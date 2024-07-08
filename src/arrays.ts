@@ -58,19 +58,6 @@ export function sparse<T>(array: Array<T | false | null | undefined>): T[] {
   return array.filter(it => it === 0 || !!it) as T[]
 }
 
-export function flatMap<T, U>(input: T[], fn: (value: T) => U | U[]): U[] {
-  const result: U[] = []
-  for (const value of input) {
-    const out = fn(value)
-    if (isArray(out)) {
-      result.push(...out)
-    } else {
-      result.push(out)
-    }
-  }
-  return result
-}
-
 /**
  * Given M arrays with N items, returns a new array which contains all combinations of the
  * input array.
