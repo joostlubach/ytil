@@ -205,6 +205,9 @@ export function bindMethods<O extends object>(obj: O, recursePrototype: boolean 
     ]
 
     for (const key of keys) {
+      if (key === 'prototype') { continue }
+      if (key === 'constructor') { continue }
+
       const value = (current as UnknownObject)[key]
       if (!isFunction(value)) { continue }
 
