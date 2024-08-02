@@ -1,6 +1,15 @@
+import { isObject } from 'lodash'
+import { AnyFunction } from './types'
 
 export function isFunction<F extends(...args: any[]) => any>(value: any): value is F {
   return typeof value === 'function'
+}
+
+export function hasFunction<O, K extends keyof O>(obj: O, key: K): obj is O & {[key in K]: AnyFunction} {
+  if (obj == null || !isObject(obj)) { return false }
+  if (!(key in (obj as any))) { return false }
+
+  return isFunction(obj[key])
 }
 
 export function bindMethods<O extends object>(obj: O, options: BindMethodOptions = {}) {
