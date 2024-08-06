@@ -14,6 +14,8 @@ export function hasFunction<O, K extends keyof O>(obj: O, key: K): obj is O & {[
 
 export function bindMethods<O extends object>(obj: O, options: BindMethodOptions = {}) {
   const isIncluded = (key: string | number | symbol) => {
+    if (builtInKeys.includes(key)) { return false }
+
     if (options.only && !filterContains(options.only, key)) { return false }
     if (options.except && filterContains(options.except, key)) { return false }
     return true
@@ -22,7 +24,11 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
   let current = obj
 
   while (current != null && current !== Object.prototype) {
-    const keys = [...Object.getOwnPropertyNames(current), ...Object.getOwnPropertySymbols(current)]
+    const keys = [
+      ...Object.getOwnPropertyNames(current),
+      ...Object.getOwnPropertySymbols(current),
+    ]
+    
     for (const key of keys) {
       if (!isIncluded(key)) { continue }
 
@@ -40,6 +46,8 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
     current = Object.getPrototypeOf(current)
   }
 }
+
+const builtInKeys: Array<string | number | symbol> = ['constructor', 'prototype']
 
 function filterContains(filter: string[] | RegExp, key: string | number | symbol) {
   const keyString = key.toString()
