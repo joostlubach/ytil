@@ -92,3 +92,14 @@ export function cartesian<T>(...arrays: T[][]): T[][] {
 
   return results
 }
+
+export function monad<T, U>(value: T, map: (input: T) => U): U
+export function monad<T, U>(value: T[], map: (input: T) => U): U[]
+export function monad<T, U>(value: T | T[], map: (input: T) => U): U | U[]
+export function monad<T, U>(value: T | T[], map: (input: T) => U): U | U[] {
+  if (isArray(value)) {
+    return value.map(map)
+  } else {
+    return map(value)
+  }
+}
