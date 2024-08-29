@@ -35,10 +35,10 @@ export function stringHash(str: string) {
   return hash
 }
 
-export function truncate(text: string, length: number, options: TruncateOptions) {
+export function truncate(text: string, length: number, options: TruncateOptions = {}) {
   const {
     ellipsis = ' … ',
-    anchor = 'start',
+    anchor = TextAnchor.Start,
   } = options
 
   if (text.length <= length) { return text }
@@ -49,13 +49,13 @@ export function truncate(text: string, length: number, options: TruncateOptions)
   switch (anchor) {
   case TextAnchor.Start:
     // Text is anchored at the start, get all the characters from the start.
-    lengthStart = length - ellipsis.length
-    lengthEnd = 0
+    lengthStart = 0
+    lengthEnd = length - ellipsis.length
     break
   case TextAnchor.End:
     // Text is anchored at the end, get all the characters from the end.
-    lengthStart = 0
-    lengthEnd = length - ellipsis.length
+    lengthStart = length - ellipsis.length
+    lengthEnd = 0
     break
   case TextAnchor.Middle:
     // Text is anchored at the middle. Get as many characters from the start and the end.

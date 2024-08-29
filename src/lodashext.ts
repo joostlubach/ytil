@@ -5,7 +5,6 @@ import {
   keys as _keys,
   values as _values,
 } from 'lodash'
-
 import { UnknownObject } from './types'
 
 /**
