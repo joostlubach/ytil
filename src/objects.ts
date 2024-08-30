@@ -1,5 +1,5 @@
 import { isArray, isEqual } from 'lodash'
-import { isFunction } from './functions'
+
 import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
 import { ObjectKey, UnknownObject } from './types'
 
@@ -190,33 +190,4 @@ export async function deepMapValuesAsync(arg: unknown, fn: (value: unknown) => P
   } else {
     return await fn(arg)
   }
-}
-
-// ------
-// Methods
-
-export function bindMethods<O extends object>(obj: O, recursePrototype: boolean = true): asserts obj is ThisType<O> & O {
-  let current = obj as UnknownObject
-
-  do {
-    const keys: Array<ObjectKey> = [
-      ...Object.getOwnPropertyNames(current),
-      ...Object.getOwnPropertySymbols(current),
-    ]
-
-    for (const key of keys) {
-      if (key === 'prototype') { continue }
-      if (key === 'constructor') { continue }
-
-      const value = (current as UnknownObject)[key]
-      if (!isFunction(value)) { continue }
-
-      Object.assign(obj, {
-        [key]: value.bind(obj),
-      })
-    }
-
-    current = Object.getPrototypeOf(current)
-    if (!recursePrototype) { break }
-  } while (current != null && current !== Object.prototype)
 }
