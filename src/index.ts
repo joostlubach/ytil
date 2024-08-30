@@ -1,4 +1,4 @@
-// @index(!__tests__): export * from ${relpath}
+// @index(!__tests__)
 export * from './EnumUtil'
 export * from './MapBuilder'
 export * from './MapUtil'
@@ -22,6 +22,7 @@ export * from './geometry'
 export * from './initials'
 export * from './links'
 export * from './lodashext'
+export * from './monad'
 export * from './numbers'
 export * from './objectID'
 export * from './objects'
