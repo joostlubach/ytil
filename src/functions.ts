@@ -14,11 +14,13 @@ export function hasFunction<O, K extends keyof O>(obj: O, key: K): obj is O & {[
 }
 
 export function bindMethods<O extends object>(obj: O, options: BindMethodOptions = {}) {
+  const {only, except, enumerable = false} = options
+
   const isIncluded = (key: string | number | symbol) => {
     if (builtInKeys.includes(key)) { return false }
 
-    if (options.only && !filterContains(options.only, key)) { return false }
-    if (options.except && filterContains(options.except, key)) { return false }
+    if (only && !filterContains(only, key)) { return false }
+    if (except && filterContains(except, key)) { return false }
     return true
   }
 
@@ -40,6 +42,7 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
       Object.defineProperty(obj, key, {
         ...prop,
         value: prop.value.bind(obj),
+        enumerable,
       })
     }
 
@@ -60,7 +63,8 @@ function filterContains(filter: string[] | RegExp, key: string | number | symbol
 }
 
 export interface BindMethodOptions {
-  only?:    string[] | RegExp
-  except?:  string[] | RegExp
-  recurse?: boolean
+  only?:       string[] | RegExp
+  except?:     string[] | RegExp
+  recurse?:    boolean
+  enumerable?: boolean
 }
