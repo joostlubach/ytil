@@ -13,6 +13,11 @@ export function hasFunction<O, K extends keyof O>(obj: O, key: K): obj is O & {[
   return isFunction(obj[key])
 }
 
+export function tap<T, U>(source: T | (() => T), tap: (value: T) => U): U {
+  const value = isFunction(source) ? source() : source
+  return tap(value)
+}
+
 export function bindMethods<O extends object>(obj: O, options: BindMethodOptions = {}) {
   const {only, except, enumerable = false} = options
 
