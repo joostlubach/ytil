@@ -1,4 +1,4 @@
-import { isArray, isEqual } from 'lodash'
+import { isArray, isEqual, omitBy } from 'lodash'
 
 import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
 import { ObjectKey, UnknownObject } from './types'
@@ -23,6 +23,12 @@ export function objectEquals<O extends object>(left: O | null | undefined, right
   }
 
   return true
+}
+
+export function omitUndefined<O extends object>(input: O): {
+  [K in keyof O as O[K] extends undefined ? never : K]: O[K]
+} {
+  return omitBy(input, value => value === undefined) as any
 }
 
 // ------
