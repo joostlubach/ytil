@@ -6,14 +6,6 @@ export function emptyObject() {
   return {}
 }
 
-export function omitUndefined<O extends object>(obj: O): OmitUndefined<O> {
-  return omitBy(obj, value => value === undefined) as unknown as OmitUndefined<O>
-}
-
-export type OmitUndefined<O extends object> = {
-  [K in keyof O as O[K] extends undefined ? never : K]: O[K]
-}
-
 // ------
 // objectEquals
 
@@ -30,6 +22,12 @@ export function objectEquals<O extends object>(left: O | null | undefined, right
   }
 
   return true
+}
+
+export function omitUndefined<O extends object>(input: O): {
+  [K in keyof O as O[K] extends undefined ? never : K]: O[K]
+} {
+  return omitBy(input, value => value === undefined) as any
 }
 
 // ------

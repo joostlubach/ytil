@@ -2,9 +2,9 @@ import { isArray } from 'lodash'
 
 export abstract class MapBuilder {
 
-  public static by<It, K>(items: It[], keyForItem: (item: It) => K): Map<K, It>
-  public static by<It, K, V>(items: It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V>
-  public static by<It, K, V = It>(items: It[], keyForItem: (item: It) => K, valueForItem?: (value: It) => V): Map<K, V> {
+  public static by<It, K>(items: readonly It[], keyForItem: (item: It) => K): Map<K, It>
+  public static by<It, K, V>(items: readonly It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V>
+  public static by<It, K, V = It>(items: readonly It[], keyForItem: (item: It) => K, valueForItem?: (value: It) => V): Map<K, V> {
     const result = new Map<K, V>()
     for (const item of items) {
       const key = keyForItem(item)
@@ -14,9 +14,9 @@ export abstract class MapBuilder {
     return result
   }
 
-  public static groupBy<It, K>(items: It[], keyForItem: (item: It) => K): Map<K, It[]>
-  public static groupBy<It, K, V>(items: It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V[]>
-  public static groupBy<It, K, V>(items: It[], keyForItem: (item: It) => K | K[], valueForItem?: (value: It) => V): Map<K, V[]> {
+  public static groupBy<It, K>(items: readonly It[], keyForItem: (item: It) => K): Map<K, readonly It[]>
+  public static groupBy<It, K, V>(items: readonly It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V[]>
+  public static groupBy<It, K, V>(items: readonly It[], keyForItem: (item: It) => K | K[], valueForItem?: (value: It) => V): Map<K, V[]> {
     const result = new Map<K, V[]>()
 
     for (const item of items) {
