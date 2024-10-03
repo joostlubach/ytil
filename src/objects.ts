@@ -31,6 +31,14 @@ export function omitUndefined<O extends object>(input: O): {
 }
 
 // ------
+// misc
+
+export function rename<O extends object, K1 extends keyof O, K2 extends string | number | symbol>(obj: O, prevKey: K1, nextKey: K2): Omit<O, K1> & {[key in K2]: O[K1]} {
+  const {[prevKey]: value, ...rest} = obj
+  return {...rest, [nextKey]: value} as Omit<O, K1> & {[key in K2]: O[K1]}
+}
+
+// ------
 // modifyObject
 
 export function modifyObject<T extends object>(root: T, path: string, modifier: (value: unknown) => unknown): T
