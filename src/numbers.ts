@@ -1,15 +1,25 @@
-export function safeParseFloat(arg: unknown, defaultValue: number): number
-export function safeParseFloat(arg: unknown, defaultValue?: null): number | null
-export function safeParseFloat(arg: unknown, defaultValue: number | null = null) {
+/**
+ * Parses a float, but never returns `NaN`. Instead, it returns `undefined` if parsing failed.
+ */
+export function safeParseFloat(arg: unknown) {
   const number = typeof arg === 'number' ? arg : parseFloat(`${arg}`)
-  return isNaN(number) ? defaultValue : number
+  return isNaN(number) ? undefined : number
 }
 
-export function safeParseInt(arg: unknown, defaultValue: number, radix?: number): number
-export function safeParseInt(arg: unknown, defaultValue?: null, radix?: number): number | null
-export function safeParseInt(arg: unknown, defaultValue: number | null = null, radix: number = 10) {
+/**
+ * Parses an integer, but takes care of some pitfalls:
+ * 
+ * - The radix is always 10, unless otherwise specified. This is important because `parseInt` will
+ *   interpret a leading `0` as an octal number, which is almost never what you want.
+ * - The result is never `NaN` but will be `undefined` if the parsing failed.
+ * 
+ * @param arg The argument to parse.
+ * @param radix An optional radius. Defaults to `10`, even if the argument starts with '0'.
+ * @returns 
+ */
+export function safeParseInt(arg: unknown, radix: number = 10): number | undefined {
   const number = typeof arg === 'number' ? arg : parseInt(`${arg}`, radix)
-  return isNaN(number) ? defaultValue : number
+  return isNaN(number) ? undefined : number
 }
 
 
