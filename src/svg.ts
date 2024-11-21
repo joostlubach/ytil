@@ -199,21 +199,23 @@ export function generateOutlines(grid: Rect[][], selected: (coords: [number, num
     }
 
     // Utility function to turn clockwise.
-    const turnCW = (direction: Direction): Direction => {
+    const turnDirection = (direction: Direction, turn: number): Direction => {
       const index = objectKeys(DIRECTIONS).indexOf(direction)
-      return objectKeys(DIRECTIONS)[(index + 1) % 4] as Direction
+      return objectKeys(DIRECTIONS)[(index + turn) % 4] as Direction
     }
 
     // Utility function to find the most logical coordinate of the node, given the direction TO the node.
     // It will always use the "inside" rectangle to find the coordinate.
-    const nodeCoords = (node: [number, number], direction: Direction): Point => {
+    const nodeCoords = (node: [number, number], direction: Direction, turn: number): Point => {
+      let baseCoords: Point
       switch (direction) {
       case 'right': {
         // We are moving to the right to reach the node, so we need to top-right coordinate of the box
         // that is to the bottom left of this node.
         const box: [number, number] = [node[0] - 1, node[1]]
         const rect = boxRect(box)
-        return {x: rect.x + rect.width + offset, y: rect.y - offset}
+        baseCoords = {x: rect.x + rect.width, y: rect.y}
+        break
       }
       
       case 'down': {
@@ -221,7 +223,8 @@ export function generateOutlines(grid: Rect[][], selected: (coords: [number, num
         // that is to the top left of this node.
         const box: [number, number] = [node[0] - 1, node[1] - 1]
         const rect = boxRect(box)
-        return {x: rect.x + rect.width + offset, y: rect.y + rect.height + offset}
+        baseCoords = {x: rect.x + rect.width, y: rect.y + rect.height}
+        break
       }
 
       case 'left': {
@@ -229,7 +232,8 @@ export function generateOutlines(grid: Rect[][], selected: (coords: [number, num
         // that is to the top right of this node.
         const box: [number, number] = [node[0], node[1] - 1]
         const rect = boxRect(box)
-        return {x: rect.x - offset, y: rect.y + rect.height + offset}
+        baseCoords = {x: rect.x, y: rect.y + rect.height}
+        break
       }
 
       case 'up': {
@@ -237,8 +241,28 @@ export function generateOutlines(grid: Rect[][], selected: (coords: [number, num
         // that is to the bottom right of this node.
         const box: [number, number] = [node[0], node[1]]
         const rect = boxRect(box)
-        return {x: rect.x - offset, y: rect.y - offset}
+        baseCoords = {x: rect.x, y: rect.y}
+        break
       }
+      }
+
+      // For clockwise turns, add the offset for the right and down instructions, and subtract for the left and up.
+      // For counter-clockwise turns, do the opposite.
+
+      let offsetX: number
+      let offsetY: number
+
+      if (turn === TURNS.cw) {
+        offsetX = (direction === 'right' || direction === 'down') ? offset : -offset
+        offsetY = (direction === 'down' || direction === 'left') ? offset : -offset
+      } else {
+        offsetX = (direction === 'right' || direction === 'up') ? -offset : offset
+        offsetY = (direction === 'left' || direction === 'up') ? offset : -offset
+      }
+
+      return {
+        x: baseCoords.x + offsetX,
+        y: baseCoords.y + offsetY,
       }
     }
 
@@ -248,6 +272,7 @@ export function generateOutlines(grid: Rect[][], selected: (coords: [number, num
 
     // Build a list of directions and nodes. Start with the start node.
     const directions: Direction[] = []
+    const turns: number[] = []
     const nodes: Array<[number, number]> = [start]
 
     // Keep track of the previous direction to detect turns. This allows us to log only the corner nodes.
@@ -261,18 +286,20 @@ export function generateOutlines(grid: Rect[][], selected: (coords: [number, num
       // Try each direction, starting with the current, to find one where the left hand box is unselected
       // and the right hand box is selected.
       let found: boolean = false
-      for (let i = 0; i < 4; i++) {
-        const lefthandBox = adjacentBox(current, direction, 'left')
-        const righthandBox = adjacentBox(current, direction, 'right')
+      let turn: number = 0
+      for (const t of objectValues(TURNS)) {
+        const dir = turnDirection(direction, t)
+
+        const lefthandBox = adjacentBox(current, dir, 'left')
+        const righthandBox = adjacentBox(current, dir, 'right')
 
         if (!isSelected(lefthandBox) && isSelected(righthandBox)) {
           // We found the direction to turn to.
+          direction = dir
+          turn = t
           found = true
           break
         }
-
-        // Try the next direction.
-        direction = turnCW(direction)
       }
 
       // If we didn't find a direction, the earlier part of this algorithm did not correctly detect
@@ -285,26 +312,31 @@ export function generateOutlines(grid: Rect[][], selected: (coords: [number, num
       if (direction !== prevDirection) {
         directions.push(prevDirection)
         nodes.push(current)
+        turns.push(turn)
         prevDirection = direction
       }
 
       current = follow(current, direction)
     } while (current[0] !== start[0] || current[1] !== start[1])
 
+    // Add a tinal clockwise turn.
+    turns.push(TURNS.cw)
+
     // Now we will follow the directions to trace the boundary.
     const points: Point[] = []
 
     // Start at the first node. Because we always start at a top-left corner, add the topleft corner of the same box.
-    points.push(nodeCoords(nodes[0], direction))
+    points.push(nodeCoords(nodes[0], direction, TURNS.cw))
 
     for (let i = 1; i < nodes.length; i++) {
       const next = nodes[i]
       const direction = directions[i - 1]
-      points.push(nodeCoords(next, direction))
+      const turn = turns[i - 1]
+      points.push(nodeCoords(next, direction, turn))
     }
 
-    // Add the first point again.
-    points.push(nodeCoords(nodes[0], direction))
+    // Add the first point again. Always with a clockwise turn.
+    points.push(nodeCoords(nodes[0], direction, turns[turns.length - 1]))
 
     return points
   }
@@ -330,6 +362,12 @@ const DIRECTIONS = {
   down:  [0, 1],
   left:  [-1, 0],
   up:    [0, -1],
+}
+
+const TURNS = {
+  straight: 0,
+  cw:       1,
+  ccw:      3,
 }
 
 type Direction = keyof typeof DIRECTIONS

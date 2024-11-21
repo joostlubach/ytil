@@ -93,6 +93,32 @@ export function resizeBoundsTo(bounds: LayoutRect, handlePoint: Point, size: Siz
   return nextBounds
 }
 
+export function makeGrid(rects: LayoutRect[][], options: MakeGridOptions = {}): Rect[][] {
+  const {straight = false, relativeTo} = options
+  if (rects.length === 0 || rects[0].length === 0) { return [] }
+
+  const offset = relativeTo ? {x: relativeTo.left, y: relativeTo.top} : {x: 0, y: 0}
+  const lefts = rects[0].map(rect => rect.left)
+
+  return rects.map(row => row.map((rect, j) => {
+    const x = (straight ? lefts[j] : rect.left) - offset.x
+    const y = rect.top - offset.y
+    
+    const width = straight && j < lefts.length - 1 ? lefts[j + 1] - rect.left : rect.width
+    const height = rect.height
+
+    return {x, y, width, height}
+  }))
+}
+
+export interface MakeGridOptions {
+  /** If true, it will use only the first row of the rects to determine x-coordinates. */
+  straight?: boolean
+
+  /** If set, it will calculate the x and y coordinates of the resulting rectangles as relative to this rect. */
+  relativeTo?: LayoutRect
+}
+
 export interface Point {
   x: number
   y: number
