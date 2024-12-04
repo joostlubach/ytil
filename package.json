@@ -5,15 +5,20 @@
   "author": "Joost Lubach",
   "private": false,
   "license": "MIT",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./src/index.ts",
-    "./*": "./src/*.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "scripts": {
-    "lint": "eslint src --ext ts,tsx",
-    "check": "tsc --noEmit",
-    "test": "bun run test"
+    "build": "pnpm clean && pnpm build:tsc",
+    "build:tsc": "tsc -p tsconfig.prod.json",
+    "clean": "rimraf dist",
+    "lint": "eslint src --ext .ts",
+    "check": "tsc -p . --noEmit",
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
     "error-polyfill": "^0.1.3",
