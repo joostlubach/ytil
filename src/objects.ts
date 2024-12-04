@@ -24,10 +24,18 @@ export function objectEquals<O extends object>(left: O | null | undefined, right
   return true
 }
 
-export function omitUndefined<O extends object>(input: O): {
-  [K in keyof O as O[K] extends undefined ? never : K]: O[K]
-} {
+export function omitUndefined<O extends Record<string, any | undefined>>(input: O): Record<string, Exclude<O[keyof O], undefined>>
+export function omitUndefined<O extends object>(input: O): { [K in keyof O as O[K] extends undefined ? never : K]: O[K] } 
+export function omitUndefined(input: object) {
   return omitBy(input, value => value === undefined) as any
+}
+
+// ------
+// misc
+
+export function rename<O extends object, K1 extends keyof O, K2 extends string | number | symbol>(obj: O, prevKey: K1, nextKey: K2): Omit<O, K1> & {[key in K2]: O[K1]} {
+  const {[prevKey]: value, ...rest} = obj
+  return {...rest, [nextKey]: value} as Omit<O, K1> & {[key in K2]: O[K1]}
 }
 
 // ------

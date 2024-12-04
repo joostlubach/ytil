@@ -8,7 +8,7 @@ export function wrapArray<T>(arg: T | T[]): T[] {
   }
 }
 
-export function arrayEquals<T>(left: T[] | null | undefined, right: T[] | null | undefined, equals: (a: T, b: T) => boolean = isEqual): boolean {
+export function arrayEquals<T>(left: readonly T[] | null | undefined, right: readonly T[] | null | undefined, equals: (a: T, b: T) => boolean = isEqual): boolean {
   if (left == null) { return right == null }
   if (right == null) { return false }
 
