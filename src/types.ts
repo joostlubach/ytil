@@ -25,6 +25,10 @@ export type EmptyObject<K extends ObjectKey = ObjectKey> = Record<K, never>
 export type ObjectKey = string | number | symbol
 export type Primitive = string | number | boolean
 
+export type PropertiesOf<O extends object> = {
+  [K in keyof O as O[K] extends AnyFunction ? never : K]: O[K]
+}
+
 export type MethodKey<T> = {
   [K in keyof T]: T[K] extends AnyFunction ? K : never
 }[keyof T]

@@ -7,6 +7,10 @@ export function emptyObject() {
   return {}
 }
 
+export function hasKeys<O extends object>(obj: object, keys: Array<keyof O>): obj is O {
+  return keys.every(key => key in obj)
+}
+
 // ------
 // objectEquals
 
