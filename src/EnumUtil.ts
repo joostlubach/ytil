@@ -1,4 +1,5 @@
 import { every } from 'lodash'
+
 import { objectValues } from './lodashext'
 
 /**
@@ -18,7 +19,7 @@ import { objectValues } from './lodashext'
  */
 export abstract class EnumUtil {
 
-  public static names(Enum: AnyEnumType): string[] {
+  public static names<E extends AnyEnumType>(Enum: E): string[] {
     if (this.isStringEnum(Enum)) {
       return Object.keys(Enum)
     } else {
@@ -55,13 +56,13 @@ export abstract class EnumUtil {
  * A formal type definition of `typeof EnumType`.
  */
 export type EnumTypeOf<V extends string | number> =
-  V extends number ? Record<string, V> & Record<V, string> :
+  V extends number ? Record<string | V, string | V> :
     V extends string ? Record<string, V> : never
 
 /**
  * Catch-all for unknown enum.
  */
-export type AnyEnumType = EnumTypeOf<string | number>
+export type AnyEnumType = EnumTypeOf<string> | EnumTypeOf<number>
 
 /**
  * Extract enum names.
