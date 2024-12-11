@@ -1,4 +1,5 @@
 // @index(!__tests__)
+export * from './Aggregate'
 export * from './EnumUtil'
 export * from './FifoBuffer'
 export * from './MapBuilder'
