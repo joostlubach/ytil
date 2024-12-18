@@ -1,4 +1,5 @@
 import { every } from 'lodash'
+import { objectKeys } from 'ytil'
 
 import { objectValues } from './lodashext'
 
@@ -19,12 +20,12 @@ import { objectValues } from './lodashext'
  */
 export abstract class EnumUtil {
 
-  public static names<E extends AnyEnumType>(Enum: E): string[] {
+  public static names<E extends AnyEnumType>(Enum: E): EnumName<E>[] {
     if (this.isStringEnum(Enum)) {
-      return Object.keys(Enum)
+      return objectKeys(Enum) as EnumName<E>[]
     } else {
       const count = Object.keys(Enum).length
-      return objectValues(Enum).slice(0, count / 2) as string[]
+      return objectValues(Enum).slice(0, count / 2) as unknown[] as EnumName<E>[]
     }
   }
 
