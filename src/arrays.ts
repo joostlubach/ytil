@@ -37,9 +37,9 @@ export function arrayMove<T>(array: T[], fromIndex: number, toIndex: number): T[
   return newArray
 }
 
-export function splitArray<T1, T2>(array: Array<T1 | T2>, predicate: (item: T1 | T2) => item is T1): [T1[], T2[]]
-export function splitArray<T>(array: T[], predicate: (item: T) => boolean): [T[], T[]]
-export function splitArray<T>(array: T[], predicate: (item: T) => boolean): [T[], T[]] {
+export function splitArray<T1, T2>(array: ReadonlyArray<T1 | T2>, predicate: (item: T1 | T2) => item is T1): readonly [readonly T1[], readonly T2[]]
+export function splitArray<T>(array: readonly T[], predicate: (item: T) => boolean): readonly [readonly T[], readonly T[]]
+export function splitArray<T>(array: readonly T[], predicate: (item: T) => boolean): readonly [readonly T[], readonly T[]] {
   const matching: T[] = []
   const rest:     T[] = []
 
