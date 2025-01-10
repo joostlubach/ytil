@@ -45,9 +45,15 @@ export abstract class EnumUtil {
     )
   }
 
-  public static coerce<E extends AnyEnumType>(Enum: E, value: unknown): EnumValue<E> | undefined {
+  public static is<E extends AnyEnumType>(Enum: E, value: unknown): value is EnumValue<E> {
+    return this.values(Enum).includes(value as EnumValue<E>)
+  }
+
+  public static coerce<E extends AnyEnumType>(Enum: E, value: unknown): EnumValue<E> {
     if (this.values(Enum).includes(value as EnumValue<E>)) {
       return value as EnumValue<E>
+    } else {
+      throw new Error(`Invalid enum value: ${value}`)
     }
   }
 
