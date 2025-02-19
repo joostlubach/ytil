@@ -196,16 +196,16 @@ export async function deepMapKeysAsync<O>(arg: O, fn: (key: ObjectKey) => Promis
   return visit(arg) as object
 }
 
-export async function deepMapValuesAsync(arg: unknown, fn: (value: unknown) => Promise<unknown>): Promise<unknown> {
+export async function deepMapValuesAsync<T, U>(arg: T, fn: (value: unknown) => unknown): Promise<U> {
   if (isPlainObject(arg)) {
     const result: UnknownObject = {}
     for (const [attribute, value] of objectEntries(arg)) {
       result[attribute] = await deepMapValuesAsync(value, fn)
     }
-    return result
+    return result as U
   } else if (isArray(arg)) {
-    return await Promise.all(arg.map(it => deepMapValuesAsync(it, fn)))
+    return await Promise.all(arg.map(it => deepMapValuesAsync(it, fn))) as U
   } else {
-    return await fn(arg)
+    return await fn(arg) as U
   }
 }
