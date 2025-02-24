@@ -53,7 +53,7 @@ export abstract class EnumUtil {
     if (this.values(Enum).includes(value as EnumValue<E>)) {
       return value as EnumValue<E>
     } else {
-      throw new Error(`Invalid enum value: ${value}`)
+      throw new TypeError(`Invalid enum value: ${value}`)
     }
   }
 
