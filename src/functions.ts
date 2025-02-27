@@ -1,4 +1,5 @@
 import { isObject } from 'lodash'
+
 import { AnyFunction } from './types'
 
 export function isFunction<F extends(...args: any[]) => any>(value: any): value is F {
@@ -53,6 +54,11 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
     if (options.recurse === false && current !== obj) { break }
     current = Object.getPrototypeOf(current)
   }
+}
+
+export function extfn<F extends AnyFunction, O>(fn: F, obj: O): F & O {
+  Object.assign(fn, obj)
+  return fn as F & O
 }
 
 const builtInKeys: Array<string | number | symbol> = ['constructor', 'prototype']
