@@ -54,7 +54,7 @@ export function splitArray<T>(array: readonly T[], predicate: (item: T) => boole
   return [matching, rest]
 }
 
-export function sparse<T>(array: Array<T | false | null | undefined>): T[] {
+export function sparse<T>(array: ReadonlyArray<T | false | null | undefined>): T[] {
   return array.filter(it => it === 0 || !!it) as T[]
 }
 
