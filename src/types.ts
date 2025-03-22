@@ -3,6 +3,9 @@ export type Constructor<T, A extends any[] = any[]> = new (...args: A) => T
 export type AbstractConstructor<T, A extends any[] = any[]> = abstract new (...args: A) => T
 export type AnyConstructor = Constructor<unknown>
 
+type _FixedArray<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _FixedArray<T, N, [T, ...R]>
+export type FixedArray<T, N extends number> = _FixedArray<T, N, []>
+
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends Record<any, any> ? DeepPartial<T[K]> : T[K]
 }
