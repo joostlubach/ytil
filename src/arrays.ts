@@ -92,3 +92,15 @@ export function cartesian<T>(...arrays: T[][]): T[][] {
 
   return results
 }
+
+export function collect<T>(iterable: Iterable<T> | ArrayLike<T>): T[] {
+  return Array.from(iterable)
+}
+
+export async function collectAsync<T>(iterable: AsyncIterable<T>): Promise<T[]> {
+  const result: T[] = []
+  for await (const item of iterable) {
+    result.push(item)
+  }
+  return result
+}
