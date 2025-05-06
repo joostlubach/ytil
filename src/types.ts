@@ -4,7 +4,11 @@ export type AbstractConstructor<T, A extends any[] = any[]> = abstract new (...a
 export type AnyConstructor = Constructor<unknown>
 
 export type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends Record<any, any> ? DeepPartial<T[K]> : T[K]
+  [K in keyof T]?:
+  T[K] extends Array<infer U> ? DeepPartial<U>[] :
+    T[K] extends Function | Date | Number | String | Boolean ? T[K] :
+      T[K] extends Record<any, any> ? DeepPartial<T[K]> :
+        T[K]
 }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>
