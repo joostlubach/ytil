@@ -1,4 +1,3 @@
-// @index(!__tests__)
 export * from './EnumUtil'
 export * from './FifoBuffer'
 export * from './MapBuilder'
@@ -39,4 +38,3 @@ export * from './sets'
 export * from './svg'
 export * from './text'
 export * from './types'
-// /index

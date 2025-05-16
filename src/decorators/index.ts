@@ -1,3 +1,2 @@
-// @index(!__tests__)
 export * from './memoized'
-// /index
+export * from './properties'
