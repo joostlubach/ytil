@@ -33,7 +33,11 @@ export type ObjectKey = string | number | symbol
 export type Primitive = string | number | boolean
 
 export type PropertiesOf<O extends object> = {
-  [K in keyof O as O[K] extends AnyFunction ? never : K]: O[K]
+  [K in keyof O as O[K] extends AnyFunction | undefined ? never : K]: O[K]
+}
+
+export type MethodsOf<O extends object> = {
+  [K in keyof O as O[K] extends AnyFunction | undefined ? K : never]: O[K]
 }
 
 export type MethodKey<T> = {
