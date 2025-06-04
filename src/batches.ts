@@ -11,3 +11,12 @@ export function *enumerateBatches<T>(input: Iterable<T>, batchSize: number): Gen
     yield batch
   }
 }
+
+export function *enumerateBatchRanges(total: number, batchSize: number): Generator<[number, number]> {
+  let start = 0
+  while (start < total) {
+    const end = Math.min(start + batchSize, total)
+    yield [start, end]
+    start = end
+  }
+}
