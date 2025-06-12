@@ -5,3 +5,16 @@ export function panic(message: string): never {
   Error.captureStackTrace(error, panic)
   throw error
 }
+
+declare global {
+  interface ErrorConstructor {
+    captureStackTrace(targetObject: object, constructorOpt?: Function): void
+  }
+  interface Error {
+    cause?: unknown
+  }
+  interface String {
+    toError(): Error
+  }
+  
+}
