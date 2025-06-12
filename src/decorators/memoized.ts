@@ -3,7 +3,7 @@ import { isFunction } from '../functions'
 /**
  * Memoizes the return value of a function or property getter.
  */
-export function memoized(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
+export function memoized(_target: object, propertyKey: string, descriptor: PropertyDescriptor) {
   if ('get' in descriptor) {
     return memoizedProperty(propertyKey, descriptor)
   } else if ('value' in descriptor && isFunction(descriptor.value)) {
@@ -19,7 +19,7 @@ function memoizedProperty(propertyKey: string, descriptor: PropertyDescriptor) {
   const original = descriptor.get
   if (original == null) { return descriptor }
 
-  descriptor.get = function(this: any) {
+  descriptor.get = function (this: any) {
     if (!this.hasOwnProperty(cacheKey)) {
       this[cacheKey] = original.call(this)
     }
@@ -34,7 +34,7 @@ function memoizedMethod(propertyKey: string, descriptor: PropertyDescriptor) {
   const original = descriptor.value
   if (original == null) { return descriptor }
 
-  descriptor.value = function(this: any, ...args: any[]) {
+  descriptor.value = function (this: any, ...args: any[]) {
     if (!this.hasOwnProperty(cacheKey)) {
       this[cacheKey] = original.call(this, ...args)
     }

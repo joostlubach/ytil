@@ -35,6 +35,10 @@ export function omitUndefined(input: object) {
   return omitBy(input, value => value === undefined) as any
 }
 
+type OmitUndefined<O extends object> =
+  O extends Record<string, infer T | undefined> ? Record<string, T> :
+    {[K in keyof O as O[K] extends undefined ? never : K]: O[K]}
+
 // ------
 // misc
 
