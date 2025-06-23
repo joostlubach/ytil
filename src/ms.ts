@@ -1,6 +1,6 @@
 // Port of the `ms` package, but then that it deterministically returns a number.
 
-export function ms(input: string | number): number {
+export function ms(input: MsInput): number {
   if (typeof input === 'number') { return input }
 
   const match = REGEXP.exec(input.trim())
@@ -21,3 +21,5 @@ const units = {
 }
 
 const REGEXP = /^(-?(?:\d+)?\.?\d+)\s*(s|m|h|d|w)?$/i
+
+export type MsInput = `${number}${keyof typeof units}` | number
