@@ -14,9 +14,9 @@ export abstract class MapBuilder {
     return result
   }
 
-  public static groupBy<It, K>(items: readonly It[], keyForItem: (item: It) => K): Map<K, readonly It[]>
-  public static groupBy<It, K, V>(items: readonly It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V[]>
-  public static groupBy<It, K, V>(items: readonly It[], keyForItem: (item: It) => K | K[], valueForItem?: (value: It) => V): Map<K, V[]> {
+  public static zstackBy<It, K>(items: readonly It[], keyForItem: (item: It) => K): Map<K, readonly It[]>
+  public static zstackBy<It, K, V>(items: readonly It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V[]>
+  public static zstackBy<It, K, V>(items: readonly It[], keyForItem: (item: It) => K | K[], valueForItem?: (value: It) => V): Map<K, V[]> {
     const result = new Map<K, V[]>()
 
     for (const item of items) {
