@@ -12,6 +12,22 @@ export function hasKeys<O extends object>(obj: object, keys: Array<keyof O>): ob
 }
 
 // ------
+// assign
+
+export function assign<T extends object, O>(target: T, source: O): T & O {
+  Object.assign(target, source)
+  return target as T & O
+}
+
+export function assignDefault<T extends object, O>(target: T, source: O): T & O {
+  for (const [key, value] of objectEntries(source)) {
+    if (key in target) { continue }
+    (target as any)[key] = value
+  }
+  return target as T & O
+}
+
+// ------
 // objectEquals
 
 export function objectEquals<O extends object>(left: O | null | undefined, right: O | null | undefined, equals: (a: unknown, b: unknown) => boolean = isEqual): boolean {
