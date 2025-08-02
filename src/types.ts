@@ -18,6 +18,7 @@ export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K
 export type MakeReadonly<T, K extends keyof T> = Omit<T, K> & Readonly<Pick<T, K>>
 export type MakeMutable<T, K extends keyof T> = Omit<T, K> & { -readonly [P in K]: T[P] }
 export type Mutable<T> = { -readonly [P in keyof T]: T[P] }
+export type Override<T, O> = Omit<T, keyof O> & { [P in keyof O]: O[P] }
 
 export type TypedClassDecorator<T extends AnyConstructor> = (target: T) => T | void
 export type TypedMethodDecorator<T extends AnyFunction> = (target: object, key: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
