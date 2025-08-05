@@ -5,11 +5,11 @@ export function ms(input: MsInput): number {
 
   const match = REGEXP.exec(input.trim())
   if (match == null) {
-    throw new Error(`Invalid time format: ${input}`);
+    throw new Error(`Invalid time format: ${input}`)
   }
 
   const multiplier = match[2] ? units[match[2] as keyof typeof units] : 1
-  return parseFloat(match[1]) * multiplier;
+  return parseFloat(match[1]) * multiplier
 }
 
 const units = {

@@ -26,9 +26,9 @@ export function stringHash(str: string) {
 
   for (let i = 0; i < str.length; i++) {
     const chr = str.charCodeAt(i)
-    // eslint-disable-next-line no-bitwise
+     
     hash = ((hash << 5) - hash) + chr
-    // eslint-disable-next-line no-bitwise
+     
     hash >>>= 0
   }
 
