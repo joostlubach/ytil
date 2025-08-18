@@ -177,17 +177,17 @@ export function deepMapKeys<O>(arg: O, fn: (key: ObjectKey) => ObjectKey): objec
   return visit(arg) as object
 }
 
-export function deepMapValues(arg: unknown, fn: (value: unknown) => unknown): unknown {
+export function deepMapValues<T, U>(arg: T, fn: (value: unknown) => unknown): U {
   if (isPlainObject(arg)) {
     const result: UnknownObject = {}
     for (const [attribute, value] of objectEntries(arg)) {
       result[attribute] = deepMapValues(value, fn)
     }
-    return result
+    return result as U
   } else if (isArray(arg)) {
-    return arg.map(it => deepMapValues(it, fn))
+    return arg.map(it => deepMapValues(it, fn)) as U
   } else {
-    return fn(arg)
+    return fn(arg) as U
   }
 }
 
@@ -213,9 +213,10 @@ export async function deepMapKeysAsync<O>(arg: O, fn: (key: ObjectKey) => Promis
 export async function deepMapValuesAsync<T, U>(arg: T, fn: (value: unknown) => unknown): Promise<U> {
   if (isPlainObject(arg)) {
     const result: UnknownObject = {}
-    for (const [attribute, value] of objectEntries(arg)) {
+    const promises = objectEntries(arg).map(async ([attribute, value]) => {
       result[attribute] = await deepMapValuesAsync(value, fn)
-    }
+    })
+    await Promise.all(promises)
     return result as U
   } else if (isArray(arg)) {
     return await Promise.all(arg.map(it => deepMapValuesAsync(it, fn))) as U
