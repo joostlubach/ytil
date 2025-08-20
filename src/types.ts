@@ -56,6 +56,12 @@ export type undefinedOptional<T> = {
   [K in keyof T as undefined extends T[K] ? K : never]?: T[K]
 }
 
+export type nullableOptional<T> = {
+  [K in keyof T as null extends T[K] ? never : K]: T[K]
+} & {
+  [K in keyof T as null extends T[K] ? K : never]?: T[K]
+}
+
 export type makeOptional<T, K extends keyof T> = {
   [P in keyof T as P extends K ? never : P]: T[P]
 } & {
