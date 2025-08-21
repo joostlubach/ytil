@@ -177,7 +177,10 @@ export function deepMapKeys<O>(arg: O, fn: (key: ObjectKey) => ObjectKey): objec
   return visit(arg) as object
 }
 
-export function deepMapValues<T, U>(arg: T, fn: (value: unknown) => unknown): U {
+export function deepMapValues<T, U>(arg: T, fn: (value: unknown) => unknown | undefined): U {
+  const retval = fn(arg)
+  if (retval !== undefined) { return retval as U }
+  
   if (isPlainObject(arg)) {
     const result: UnknownObject = {}
     for (const [attribute, value] of objectEntries(arg)) {
@@ -187,7 +190,7 @@ export function deepMapValues<T, U>(arg: T, fn: (value: unknown) => unknown): U 
   } else if (isArray(arg)) {
     return arg.map(it => deepMapValues(it, fn)) as U
   } else {
-    return fn(arg) as U
+    return arg as unknown as U
   }
 }
 
