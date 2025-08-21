@@ -10,7 +10,7 @@ import {
  * This file contains some Lodash methods with slightly stricter typing.
  */
 
-export const isPlainObject = _isPlainObject as <T extends object = Record<string, any>>(obj: unknown) => obj is T
+export const isPlainObject = _isPlainObject as <T extends object = Record<string | number | symbol, any>>(obj: unknown) => obj is T
 export const isObject = _isObject as <T extends object>(obj: unknown) => obj is T
 export const objectKeys = _keys as <T>(obj: T) => Array<keyof T>
 export const objectValues = _values as <T>(obj: T) => Array<T[keyof T]>
