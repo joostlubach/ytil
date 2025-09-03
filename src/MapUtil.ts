@@ -9,6 +9,10 @@ export abstract class MapUtil {
     return result
   }
 
+  public static objectToMap<T extends object>(obj: T): Map<keyof T, T[keyof T]> {
+    return new Map<keyof T, T[keyof T]>(Object.entries(obj) as [keyof T, T[keyof T]][])
+  }
+
   public static mapToObject<K extends PropertyKey, V>(map: Map<K, V>): Record<K, V> {
     return Object.fromEntries(map.entries()) as Record<K, V>
   }
