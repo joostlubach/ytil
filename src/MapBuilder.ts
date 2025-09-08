@@ -2,9 +2,23 @@ import { isArray } from 'lodash'
 
 export abstract class MapBuilder {
 
-  public static by<It, K>(items: readonly It[], keyForItem: (item: It) => K): Map<K, It>
-  public static by<It, K, V>(items: readonly It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V>
-  public static by<It, K, V = It>(items: readonly It[], keyForItem: (item: It) => K, valueForItem?: (value: It) => V): Map<K, V> {
+  public static firsts<It, K>(items: readonly It[], keyForItem: (item: It) => K): Map<K, It>
+  public static firsts<It, K, V>(items: readonly It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V>
+  public static firsts<It, K, V = It>(items: readonly It[], keyForItem: (item: It) => K, valueForItem?: (value: It) => V): Map<K, V> {
+    const result = new Map<K, V>()
+    for (const item of items) {
+      const key = keyForItem(item)
+      if (result.has(key)) { continue }
+
+      const value = valueForItem == null ? (item as unknown as V) : valueForItem(item)
+      result.set(key, value)
+    }
+    return result
+  }
+
+  public static lasts<It, K>(items: readonly It[], keyForItem: (item: It) => K): Map<K, It>
+  public static lasts<It, K, V>(items: readonly It[], keyForItem: (item: It) => K, valueForItem: (value: It) => V): Map<K, V>
+  public static lasts<It, K, V = It>(items: readonly It[], keyForItem: (item: It) => K, valueForItem?: (value: It) => V): Map<K, V> {
     const result = new Map<K, V>()
     for (const item of items) {
       const key = keyForItem(item)
