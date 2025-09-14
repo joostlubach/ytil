@@ -163,10 +163,10 @@ export function deepMapKeys<O extends object = Record<string, any>>(arg: O, fn: 
     const result = fn(value, prefix)
     if (result !== undefined) { return result }
 
-    if (isObject(value)) {
-      return deepMapKeys(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
-    } else if (isArray(value)) {
+    if (isArray(value)) {
       return value.map((it, index) => iter(it, [...prefix, index]))
+    } else if (isObject(value)) {
+      return deepMapKeys(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
     }
@@ -180,10 +180,10 @@ export function deepMapValues<O extends object = Record<string, any>>(arg: O, fn
     const result = fn(value, prefix)
     if (result !== undefined) { return result }
 
-    if (isObject(value)) {
-      return deepMapValues(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
-    } else if (isArray(value)) {
+    if (isArray(value)) {
       return value.map((it, index) => iter(it, [...prefix, index]))
+    } else if (isObject(value)) {
+      return deepMapValues(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
     }
@@ -192,15 +192,15 @@ export function deepMapValues<O extends object = Record<string, any>>(arg: O, fn
   return mapValues(arg, (value, key) => iter(value, [key])) as O
 }
 
-export async function deepMapKeysAsync<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey): Promise<O> {
+export async function deepMapKeysAsync<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey | Promise<ObjectKey>): Promise<O> {
   const iter = async (value: unknown, prefix: ObjectKey[]): Promise<unknown> => {
-    const result = fn(value, prefix)
+    const result = await fn(value, prefix)
     if (result !== undefined) { return result }
 
-    if (isObject(value)) {
-      return await deepMapKeysAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
-    } else if (isArray(value)) {
+    if (isArray(value)) {
       return await Promise.all(value.map((it, index) => iter(it, [...prefix, index])))
+    } else if (isObject(value)) {
+      return await deepMapKeysAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
     }
@@ -214,15 +214,15 @@ export async function deepMapKeysAsync<O extends object = Record<string, any>>(a
   return Object.fromEntries(entries) as O
 }
 
-export async function deepMapValuesAsync<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown): Promise<O> {
+export async function deepMapValuesAsync<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown | Promise<unknown>): Promise<O> {
   const iter = async (value: unknown, prefix: ObjectKey[]): Promise<unknown> => {
-    const result = fn(value, prefix)
+    const result = await fn(value, prefix)
     if (result !== undefined) { return result }
 
-    if (isObject(value)) {
-      return await deepMapValuesAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
-    } else if (isArray(value)) {
+    if (isArray(value)) {
       return await Promise.all(value.map((it, index) => iter(it, [...prefix, index])))
+    } else if (isObject(value)) {
+      return await deepMapValuesAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
     }
