@@ -1,4 +1,4 @@
-import { isArray, isEqual, omitBy } from 'lodash'
+import { isArray, isEqual, mapKeys, mapValues, omitBy } from 'lodash'
 
 import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
 import { ObjectKey, UnknownObject } from './types'
@@ -52,7 +52,7 @@ export function omitUndefined(input: object) {
 // ------
 // misc
 
-export function rename<O extends object, K1 extends keyof O, K2 extends string | number | symbol>(obj: O, prevKey: K1, nextKey: K2): Omit<O, K1> & {[key in K2]: O[K1]} {
+export function rename<O extends object, K1 extends keyof O, K2 extends ObjectKey>(obj: O, prevKey: K1, nextKey: K2): Omit<O, K1> & {[key in K2]: O[K1]} {
   const {[prevKey]: value, ...rest} = obj
   return {...rest, [nextKey]: value} as Omit<O, K1> & {[key in K2]: O[K1]}
 }
@@ -158,72 +158,80 @@ export type ModifyInObjectCallback<R> = <T>(
 // ------
 // deepMap*
 
-export function deepMapKeys<O>(arg: O, fn: (key: ObjectKey) => ObjectKey): object {
-  const visit = (arg: unknown): unknown => {
-    if (isArray(arg)) {
-      return arg.map(it => deepMapKeys(it, fn))
-    } else if (isObject(arg)) {
-      const result: UnknownObject = {}
-      for (const [attribute, value] of objectEntries(arg)) {
-        if (!isObject(value)) { continue }
-        result[fn(attribute)] = deepMapKeys(value, fn)
-      }
-      return result
+export function deepMapKeys<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey): O {
+  const iter = (value: unknown, prefix: ObjectKey[]): unknown => {
+    const result = fn(value, prefix)
+    if (result !== undefined) { return result }
+
+    if (isObject(value)) {
+      return deepMapKeys(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
+    } else if (isArray(value)) {
+      return value.map((it, index) => iter(it, [...prefix, index]))
     } else {
-      return arg
+      return value
     }
   }
 
-  return visit(arg) as object
+  return mapKeys(arg, (value, key) => iter(value, [key])) as O
 }
 
-export function deepMapValues<T, U>(arg: T, fn: (value: unknown) => unknown | undefined): U {
-  const retval = fn(arg)
-  if (retval !== undefined) { return retval as U }
-  
-  if (isPlainObject(arg)) {
-    const result: UnknownObject = {}
-    for (const [attribute, value] of objectEntries(arg)) {
-      result[attribute] = deepMapValues(value, fn)
-    }
-    return result as U
-  } else if (isArray(arg)) {
-    return arg.map(it => deepMapValues(it, fn)) as U
-  } else {
-    return arg as unknown as U
-  }
-}
+export function deepMapValues<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown): O {
+  const iter = (value: unknown, prefix: ObjectKey[]): unknown => {
+    const result = fn(value, prefix)
+    if (result !== undefined) { return result }
 
-export async function deepMapKeysAsync<O>(arg: O, fn: (key: ObjectKey) => Promise<ObjectKey>): Promise<object> {
-  const visit = async (arg: unknown): Promise<unknown> => {
-    if (isArray(arg)) {
-      return await Promise.all(arg.map(it => deepMapKeysAsync(it, fn)))
-    } else if (isObject(arg)) {
-      const result: UnknownObject = {}
-      for (const [attribute, value] of objectEntries(arg)) {
-        if (!isObject(value)) { continue }
-        result[await fn(attribute)] = deepMapKeysAsync(value, fn)
-      }
-      return result
+    if (isObject(value)) {
+      return deepMapValues(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
+    } else if (isArray(value)) {
+      return value.map((it, index) => iter(it, [...prefix, index]))
     } else {
-      return arg
+      return value
     }
   }
 
-  return visit(arg) as object
+  return mapValues(arg, (value, key) => iter(value, [key])) as O
 }
 
-export async function deepMapValuesAsync<T, U>(arg: T, fn: (value: unknown) => unknown): Promise<U> {
-  if (isPlainObject(arg)) {
-    const result: UnknownObject = {}
-    const promises = objectEntries(arg).map(async ([attribute, value]) => {
-      result[attribute] = await deepMapValuesAsync(value, fn)
-    })
-    await Promise.all(promises)
-    return result as U
-  } else if (isArray(arg)) {
-    return await Promise.all(arg.map(it => deepMapValuesAsync(it, fn))) as U
-  } else {
-    return await fn(arg) as U
+export async function deepMapKeysAsync<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey): Promise<O> {
+  const iter = async (value: unknown, prefix: ObjectKey[]): Promise<unknown> => {
+    const result = fn(value, prefix)
+    if (result !== undefined) { return result }
+
+    if (isObject(value)) {
+      return await deepMapKeysAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
+    } else if (isArray(value)) {
+      return await Promise.all(value.map((it, index) => iter(it, [...prefix, index])))
+    } else {
+      return value
+    }
   }
+
+  const promises = objectEntries(arg).map(async ([key, value]) => {
+    const newKey = await iter(value, [key])
+    return [newKey, value] as [ObjectKey, unknown]
+  })
+  const entries = await Promise.all(promises)
+  return Object.fromEntries(entries) as O
+}
+
+export async function deepMapValuesAsync<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown): Promise<O> {
+  const iter = async (value: unknown, prefix: ObjectKey[]): Promise<unknown> => {
+    const result = fn(value, prefix)
+    if (result !== undefined) { return result }
+
+    if (isObject(value)) {
+      return await deepMapValuesAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
+    } else if (isArray(value)) {
+      return await Promise.all(value.map((it, index) => iter(it, [...prefix, index])))
+    } else {
+      return value
+    }
+  }
+
+  const promises = objectEntries(arg).map(async ([key, value]) => {
+    const newValue = await iter(value, [key])
+    return [key, newValue] as [ObjectKey, unknown]
+  })
+  const entries = await Promise.all(promises)
+  return Object.fromEntries(entries) as O
 }

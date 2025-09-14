@@ -1,4 +1,5 @@
 import { isArray, isEqual } from 'lodash'
+import { isFunction } from './functions'
 
 export function wrapArray<T>(arg: T | T[]): T[] {
   if (isArray(arg)) {
@@ -101,6 +102,19 @@ export async function collectAsync<T>(iterable: AsyncIterable<T>): Promise<T[]> 
   const result: T[] = []
   for await (const item of iterable) {
     result.push(item)
+  }
+  return result
+}
+
+export function trimOrPad<T>(array: readonly T[], length: number, padValue: T | ((index: number) => T)): T[] {
+  if (array.length > length) {
+    return array.slice(0, length)
+  }
+  
+  const result = array.slice()
+  while (result.length < length) {
+    const value = isFunction(padValue) ? padValue(result.length) : padValue
+    result.push(value)
   }
   return result
 }
