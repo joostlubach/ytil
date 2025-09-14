@@ -158,7 +158,7 @@ export type ModifyInObjectCallback<R> = <T>(
 // ------
 // deepMap*
 
-export function deepMapKeys<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey): O {
+export function deepMapKeys<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey): O {
   const iter = (value: unknown, prefix: ObjectKey[]): unknown => {
     const result = fn(value, prefix)
     if (result !== undefined) { return result }
@@ -175,7 +175,7 @@ export function deepMapKeys<O extends object>(arg: O, fn: (value: unknown, keyPa
   return mapKeys(arg, (value, key) => iter(value, [key])) as O
 }
 
-export function deepMapValues<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown): O {
+export function deepMapValues<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown): O {
   const iter = (value: unknown, prefix: ObjectKey[]): unknown => {
     const result = fn(value, prefix)
     if (result !== undefined) { return result }
@@ -192,7 +192,7 @@ export function deepMapValues<O extends object>(arg: O, fn: (value: unknown, key
   return mapValues(arg, (value, key) => iter(value, [key])) as O
 }
 
-export async function deepMapKeysAsync<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey): Promise<O> {
+export async function deepMapKeysAsync<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => ObjectKey): Promise<O> {
   const iter = async (value: unknown, prefix: ObjectKey[]): Promise<unknown> => {
     const result = fn(value, prefix)
     if (result !== undefined) { return result }
@@ -214,7 +214,7 @@ export async function deepMapKeysAsync<O extends object>(arg: O, fn: (value: unk
   return Object.fromEntries(entries) as O
 }
 
-export async function deepMapValuesAsync<O extends object>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown): Promise<O> {
+export async function deepMapValuesAsync<O extends object = Record<string, any>>(arg: O, fn: (value: unknown, keyPath: ObjectKey[]) => unknown): Promise<O> {
   const iter = async (value: unknown, prefix: ObjectKey[]): Promise<unknown> => {
     const result = fn(value, prefix)
     if (result !== undefined) { return result }
