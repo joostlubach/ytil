@@ -2,6 +2,7 @@ export type AnyFunction = (...args: any[]) => any
 export type Constructor<T, A extends any[] = any[]> = new (...args: A) => T
 export type AbstractConstructor<T, A extends any[] = any[]> = abstract new (...args: A) => T
 export type AnyConstructor = Constructor<unknown>
+export type ConstructorParams<C extends AnyConstructor> = C extends new (...args: infer A) => any ? A : never
 
 type _FixedArray<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _FixedArray<T, N, [T, ...R]>
 export type FixedArray<T, N extends number> = _FixedArray<T, N, []>
@@ -32,7 +33,7 @@ type Camelize<S extends string> = S extends `${infer Head}${'_' | '-' | ' '}${in
   : S
 
 export type UnknownObject<K extends ObjectKey = ObjectKey> = Record<K, unknown>
-export type EmptyObject<K extends ObjectKey = ObjectKey> = Record<K, never>
+export type EmptyObject = object & Record<never, never>
 
 export type ObjectKey = string | number | symbol
 export type Primitive = string | number | boolean
