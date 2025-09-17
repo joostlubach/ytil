@@ -1,5 +1,4 @@
 import { isArray, isEqual, mapKeys, mapValues, omitBy } from 'lodash'
-
 import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
 import { ObjectKey, UnknownObject } from './types'
 
@@ -165,7 +164,7 @@ export function deepMapKeys<O extends object = Record<string, any>>(arg: O, fn: 
 
     if (isArray(value)) {
       return value.map((it, index) => iter(it, [...prefix, index]))
-    } else if (isObject(value)) {
+    } else if (isPlainObject(value)) {
       return deepMapKeys(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
@@ -182,7 +181,7 @@ export function deepMapValues<O extends object = Record<string, any>>(arg: O, fn
 
     if (isArray(value)) {
       return value.map((it, index) => iter(it, [...prefix, index]))
-    } else if (isObject(value)) {
+    } else if (isPlainObject(value)) {
       return deepMapValues(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
@@ -199,7 +198,7 @@ export async function deepMapKeysAsync<O extends object = Record<string, any>>(a
 
     if (isArray(value)) {
       return await Promise.all(value.map((it, index) => iter(it, [...prefix, index])))
-    } else if (isObject(value)) {
+    } else if (isPlainObject(value)) {
       return await deepMapKeysAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
@@ -221,7 +220,7 @@ export async function deepMapValuesAsync<O extends object = Record<string, any>>
 
     if (isArray(value)) {
       return await Promise.all(value.map((it, index) => iter(it, [...prefix, index])))
-    } else if (isObject(value)) {
+    } else if (isPlainObject(value)) {
       return await deepMapValuesAsync(value, (value, keyPath) => fn(value, [...prefix, ...keyPath]))
     } else {
       return value
