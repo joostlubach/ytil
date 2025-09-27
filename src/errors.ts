@@ -1,5 +1,13 @@
 import 'error-polyfill'
 
+export function errorMessage(error: unknown) {
+  if (error instanceof Error) {
+    return error.message
+  } else {
+    return `${error}`
+  }
+}
+
 export function panic(message: string): never {
   const error = new Error(message)
   Error.captureStackTrace(error, panic)
