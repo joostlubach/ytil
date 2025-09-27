@@ -20,7 +20,6 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.3.0",
     "js-yaml": "^4.1.0",
     "@types/jest": "^29.5.14",
     "@types/ms": "^0.7.34",
