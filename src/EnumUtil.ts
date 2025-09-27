@@ -1,7 +1,6 @@
 import { every } from 'lodash'
-import { objectKeys } from 'ytil'
 
-import { objectValues } from './lodashext'
+import { objectKeys, objectValues } from './lodashext'
 
 /**
  * Generic utility for enum introspection.

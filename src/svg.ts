@@ -1,6 +1,7 @@
 import { range } from 'lodash'
-import { objectKeys, objectValues } from 'ytil'
+
 import { Point, Rect } from './geometry'
+import { objectKeys, objectValues } from './lodashext'
 
 export interface SVGPathOptions {
   roundCorners?: number | number[]
