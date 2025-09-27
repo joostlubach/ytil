@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'bun:test'
+
 import { NestedMap } from '../NestedMap'
 
 describe('NestedMap', () => {

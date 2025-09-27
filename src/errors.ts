@@ -6,6 +6,14 @@ export function panic(message: string): never {
   throw error
 }
 
+export function errorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message
+  } else {
+    return `${error}`
+  }
+}
+
 declare global {
   interface ErrorConstructor {
     captureStackTrace(targetObject: object, constructorOpt?: Function): void
