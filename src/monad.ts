@@ -10,9 +10,9 @@ export namespace monad {
     }
   }
 
-  export function map<T, U>(value: T, map: (value: T) => U): U
   export function map<T, U>(value: T[], map: (value: T) => U): U[]
   export function map<T, U>(value: T | T[], map: (value: T) => U): U | U[]
+  export function map<T, U>(value: T, map: (value: T) => U): U
   export function map<T, U>(value: T | T[], map: (value: T) => U): U | U[] {
     if (isArray(value)) {
       return value.map(map)
