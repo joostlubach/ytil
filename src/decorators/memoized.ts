@@ -21,9 +21,9 @@ function memoizedProperty(propertyKey: string, descriptor: PropertyDescriptor, g
     // Redefine the property with this cached value.
     Object.defineProperty(this, propertyKey, {
       value,
-      writable: false,
-      enumerable: descriptor.enumerable,
-      configurable: descriptor.configurable
+      writable:     false,
+      enumerable:   descriptor.enumerable,
+      configurable: descriptor.configurable,
     })
 
     return value
@@ -38,10 +38,10 @@ function memoizedMethod(propertyKey: string, descriptor: PropertyDescriptor, fn:
 
     // Redefine the property with a simple function returning this cached value.
     Object.defineProperty(this, propertyKey, {
-      value: () => value,
-      writable: false,
-      enumerable: descriptor.enumerable,
-      configurable: descriptor.configurable
+      value:        () => value,
+      writable:     false,
+      enumerable:   descriptor.enumerable,
+      configurable: descriptor.configurable,
     })
 
     return value
