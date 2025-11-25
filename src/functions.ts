@@ -1,18 +1,30 @@
-import { isObject } from 'lodash'
-
 import { AnyFunction } from './types'
 
 export function isFunction<F extends(...args: any[]) => any>(value: any): value is F {
   return typeof value === 'function'
 }
 
-export function hasFunction<O, K extends keyof O>(obj: O, key: K): obj is O & {[key in K]: AnyFunction} {
-  if (obj == null || !isObject(obj)) { return false }
-  if (!(key in (obj as any))) { return false }
-
-  return isFunction(obj[key])
+export function hasMethod<T, K extends string>(
+  receiver: T,
+  name: K,
+  length?: number
+): receiver is T & Record<K, () => void> {
+  if (receiver == null || typeof receiver !== 'object') {
+    return false
+  }
+  
+  const method = (receiver as Record<K, unknown>)[name]
+  
+  if (!isFunction(method)) {
+    return false
+  }
+  
+  if (length !== undefined && method.length !== length) {
+    return false
+  }
+  
+  return true
 }
-
 export function tap<T, U>(source: T | (() => T), tap: (value: T) => U): U {
   const value = isFunction(source) ? source() : source
   return tap(value)
