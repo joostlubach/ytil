@@ -1,5 +1,4 @@
 import { range } from 'lodash'
-
 import { Point, Rect } from './geometry'
 import { objectKeys, objectValues } from './lodashext'
 
@@ -23,10 +22,16 @@ export function svgPath(points: Point[], options: SVGPathOptions = {}): string {
     }
   }
 
-  const cornerMetricsAt = (index: number): Point[] => {
+  interface CornerMetric {
+    start:  Point
+    radius: number
+    end:    Point
+  }
+
+  const cornerMetricsAt = (index: number): CornerMetric => {
     const point = points[index]
     const r = cornerRadiusAt(index)
-    if (r === 0) { return [point] }
+    if (r === 0) { return {start: point, radius: 0, end: point} }
 
     let prevPoint: Point
     let nextPoint: Point
@@ -44,22 +49,22 @@ export function svgPath(points: Point[], options: SVGPathOptions = {}): string {
     const l2 = Math.sqrt((point.x - nextPoint.x) ** 2 + (point.y - nextPoint.y) ** 2)
     if (l1 === 0 || l2 === 0) {
       // No corner can be made.
-      return [point]
+      return {start: point, radius: 0, end: point}
     }
 
-    const r1 = r / Math.max(l1, r)
-    const r2 = r / Math.max(l2, r)
+    // Limit radius to half of each edge length to prevent overlap
+    const actualR = Math.min(r, l1 / 2, l2 / 2)
 
-    const p1 = {
-      x: point.x - (point.x - prevPoint.x) * r1,
-      y: point.y - (point.y - prevPoint.y) * r1,
+    const start = {
+      x: point.x - (point.x - prevPoint.x) * (actualR / l1),
+      y: point.y - (point.y - prevPoint.y) * (actualR / l1),
     }
-    const p2 = {
-      x: point.x - (point.x - nextPoint.x) * r2,
-      y: point.y - (point.y - nextPoint.y) * r2,
+    const end = {
+      x: point.x - (point.x - nextPoint.x) * (actualR / l2),
+      y: point.y - (point.y - nextPoint.y) * (actualR / l2),
     }
 
-    return [p1, point, p2]
+    return {start, radius: actualR, end}
   }
 
   // Check if we need to start with a radius.
@@ -69,11 +74,16 @@ export function svgPath(points: Point[], options: SVGPathOptions = {}): string {
   let path = ''
 
   for (const index of range(0, points.length)) {
-    const [p1, p2, p3] = metrics[index]
+    const metric = metrics[index]
 
-    path += `${first ? 'M' : 'L'} ${p1.x},${p1.y} `
-    if (p2 != null) {
-      path += `Q ${p2.x},${p2.y} ${p3.x},${p3.y} `
+    path += `${first ? 'M' : 'L'} ${metric.start.x},${metric.start.y} `
+    if (metric.radius > 0) {
+      // SVG arc: A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+      // rx, ry: radius (same for circular arc)
+      // x-axis-rotation: 0 (no rotation)
+      // large-arc-flag: 0 (small arc for corners)
+      // sweep-flag: 1 (positive angle direction)
+      path += `A ${metric.radius},${metric.radius} 0 0 1 ${metric.end.x},${metric.end.y} `
     }
     first = false
   }
