@@ -1,15 +1,33 @@
-import { isFunction } from '../functions'
+
 
 /**
  * Memoizes the return value of a function or property getter.
  */
-export function memoized(_target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-  if ('get' in descriptor && descriptor.get != null) {
-    return memoizedProperty(propertyKey, descriptor, descriptor.get)
-  } else if ('value' in descriptor && isFunction(descriptor.value)) {
-    return memoizedMethod(propertyKey, descriptor, descriptor.value)
+export function memoized(target: any, context: ClassMethodDecoratorContext | ClassGetterDecoratorContext) {
+  if (context.kind === 'getter') {
+    return function(this: any) {
+      const value = target.call(this)
+      Object.defineProperty(this, context.name, {
+        value,
+        writable: false,
+        enumerable: true,
+        configurable: true,
+      })
+      return value
+    }
+  } else if (context.kind === 'method') {
+    return function(this: any, ...args: any[]) {
+      const value = target.call(this, ...args)
+      Object.defineProperty(this, context.name, {
+        value: () => value,
+        writable: false,
+        enumerable: true,
+        configurable: true,
+      })
+      return value
+    }
   } else {
-    throw new Error('@memoized can only be applied to methods or property getters')
+    throw new Error('@memoized can only be applied to methods or getters')
   }
 }
 
