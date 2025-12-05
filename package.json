@@ -20,7 +20,6 @@
     "src"
   ],
   "scripts": {
-    "postinstall": "npm run build",
     "build": "npm run clean && npm run build:tsc",
     "build:tsc": "npm run build:tsc:esm && npm run build:tsc:cjs",
     "build:tsc:esm": "tsc -p tsconfig.prod.json --module es2022 --outDir dist/esm --declarationDir dist/types",
