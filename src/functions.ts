@@ -8,7 +8,7 @@ export function hasMethod<T, K extends string>(
   receiver: T,
   name: K,
   length?: number,
-): receiver is T & Record<K, () => void> {
+): receiver is T & Record<K, () => unknown> {
   if (receiver == null || typeof receiver !== 'object') {
     return false
   }
