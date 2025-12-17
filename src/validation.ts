@@ -6,7 +6,7 @@ export function isFileURL(url: string) {
   return regexps.fileURL.test(url)
 }
 
-export function isHttpURL(url: string) {
+export function isHTTPURL(url: string) {
   return regexps.httpURL.test(url)
 }
 
@@ -24,7 +24,7 @@ export function isEmail(email: string) {
 
 
 export const regexps = {
-  url:      /^(https?:\/\/)?(.*?)(?::(\d+))?(.*?)?(\?.*?)?(#.*?)?$/,
+  url:      /^https?:\/\/(.*?)(?::(\d+))?(.*?)?(\?.*?)?(#.*?)?$/,
   fileURL:  /^file:\/\//i,
   httpURL:  /^https?:\/\//i,
   imageURL: /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)(\?.*?)?(#.*?)?$/i,
