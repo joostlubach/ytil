@@ -1,4 +1,4 @@
-export type AnyFunction = (...args: any[]) => void
+export type AnyFunction = (...args: any[]) => any
 export type Constructor<T, A extends any[] = any[]> = new (...args: A) => T
 export type AbstractConstructor<T, A extends any[] = any[]> = abstract new (...args: A) => T
 export type AnyConstructor = Constructor<unknown>
