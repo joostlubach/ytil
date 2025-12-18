@@ -104,7 +104,8 @@ function modify<O>(obj: O, segments: ObjectKey[], modifier: <T>(value: T) => unk
 
 export function modifyInObject<R>(root: R, path: string, modify: ModifyInObjectCallback<R>): boolean {
   const segments = path.split('.')
-  const leaf = segments.pop()!
+  const leaf = segments.pop()
+  if (leaf == null) { return false}
 
   let current: unknown = root
   while (current != null && segments.length > 0) {
