@@ -149,7 +149,7 @@ function keyToIndex(key: string) {
 
 export type ModifyInObjectCallback<R> = <T>(
   value: T,
-  parent: unknown,
+  parent: object,
   key: string | number,
   root: R
 ) => void | boolean
