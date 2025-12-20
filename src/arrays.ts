@@ -59,6 +59,10 @@ export function sparse<T>(array: ReadonlyArray<T | false | null | undefined>): T
   return array.filter(it => it === 0 || !!it) as T[]
 }
 
+export function sparseStrict<T>(array: ReadonlyArray<T | null | undefined>): T[] {
+  return array.filter(it => it != null) as T[]
+}
+
 /**
  * Given M arrays with N items, returns a new array which contains all combinations of the
  * input array.
