@@ -7,13 +7,42 @@ export type ConstructorParams<C extends AnyConstructor> = C extends new (...args
 type _FixedArray<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _FixedArray<T, N, [T, ...R]>
 export type FixedArray<T, N extends number> = _FixedArray<T, N, []>
 
-export type DeepPartial<T> = {
-  [K in keyof T]?:
-  T[K] extends Array<infer U> ? DeepPartial<U>[] :
-    T[K] extends Function | Date | Number | String | Boolean ? T[K] :
-      T[K] extends Record<any, any> ? DeepPartial<T[K]> :
-        T[K]
-}
+export type Primitive = string | number | boolean
+type Builtin =
+  | Primitive
+  | Date
+  | RegExp
+  | Error
+  | Function;
+
+// tuple detection (so tuples keep their shape)
+type _IsTuple<T extends readonly unknown[]> = number extends T["length"] ? false : true;
+
+export type DeepPartial<T> =
+  // don't recurse into builtins
+  T extends Builtin ? T :
+
+  // collections
+  T extends Map<infer K, infer V> ? Map<K, DeepPartial<V>> :
+  T extends ReadonlyMap<infer K, infer V> ? ReadonlyMap<K, DeepPartial<V>> :
+  T extends Set<infer U> ? Set<DeepPartial<U>> :
+  T extends ReadonlySet<infer U> ? ReadonlySet<DeepPartial<U>> :
+
+  // arrays / tuples (incl readonly)
+  T extends readonly (infer U)[] ?
+    _IsTuple<T> extends true
+      ? { [K in keyof T]?: DeepPartial<T[K]> } // tuple: keep indices, make optional
+      : ReadonlyArray<DeepPartial<U>> // array: recurse element
+  :
+
+  // objects
+  T extends object ? { [K in keyof T]?: DeepPartial<T[K]> } :
+
+  // fallback
+  T;
+
+  
+
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>
 export type MakeReadonly<T, K extends keyof T> = Omit<T, K> & Readonly<Pick<T, K>>
@@ -36,7 +65,6 @@ export type UnknownObject<K extends ObjectKey = ObjectKey> = Record<K, unknown>
 export type EmptyObject = object & Record<never, never>
 
 export type ObjectKey = string | number | symbol
-export type Primitive = string | number | boolean
 
 export type PropertiesOf<O extends object> = {
   [K in keyof O as O[K] extends AnyFunction | undefined ? never : K]: O[K]
