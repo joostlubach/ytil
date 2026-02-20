@@ -8,8 +8,8 @@ export function cleanTextValue(value: string | null | undefined, trim: boolean =
   return value === '' ? null : value
 }
 
-export function blockTrim(text: string) {
-  return text.trim().split('\n').map(line => line.trim()).join('\n')
+export function blockTrim(text: string, multiline: boolean = false) {
+  return text.trim().split('\n').map(line => line.trim()).join(multiline ? '\n' : ' ')
 }
 
 export function stringContains(string: string, word: string) {
