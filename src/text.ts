@@ -8,8 +8,35 @@ export function cleanTextValue(value: string | null | undefined, trim: boolean =
   return value === '' ? null : value
 }
 
-export function blockTrim(text: string, multiline: boolean = false) {
-  return text.trim().split('\n').map(line => line.trim()).join(multiline ? '\n' : ' ')
+export function blockTrim(text: string, breaks: 'keep' | 'remove' | 'markdown' = 'markdown') {
+  const lines = text.trim().split('\n')
+  if (breaks === 'remove') {
+    return lines.map(it => it.trim()).join(' ')
+  }
+  if (breaks === 'keep') {
+    return lines.map(it => it.trim()).join('\n')
+  }
+
+  // Markdown mode:
+  // - Keep any sequence of 2 or more line breaks
+  // - Replace single line breaks with spaces, unless the line ends with two or more spaces (markdown line break)
+  const chunks: string[] = []
+
+  let prevEmpty: boolean = false
+  for (let line of lines) {
+    const ending = line.match(/\s{2,}$/) != null ? '\n' : ' '
+    line = line.trim()
+    
+    if (line === '') {
+      if (!prevEmpty) { chunks.push('\n') }
+      chunks.push('\n')
+    } else {
+      chunks.push(line + ending)
+    }
+    prevEmpty = line === ''
+  }
+
+  return chunks.join('')
 }
 
 export function stringContains(string: string, word: string) {
