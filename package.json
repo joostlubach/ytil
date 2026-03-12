@@ -27,15 +27,13 @@
     "clean": "rimraf dist",
     "lint": "eslint",
     "check": "tsc -p . --noEmit",
-    "test": "NODE_ENV=test jest"
+    "test": "vitest"
   },
   "dependencies": {
     "error-polyfill": "^0.1.3",
-    "jest": "^30.2.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.20",
     "@types/ms": "^0.7.34",
     "@types/node": "^24.5.2",
