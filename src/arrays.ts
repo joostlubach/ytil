@@ -1,5 +1,9 @@
-import { isArray, isEqual } from 'lodash'
+import { isArray as _isArray, isEqual } from 'lodash'
 import { isFunction } from './functions'
+
+export function isArray<T>(value: any): value is T[] {
+  return _isArray(value)
+}
 
 export function wrapArray<T>(arg: T | T[]): T[] {
   if (isArray(arg)) {
