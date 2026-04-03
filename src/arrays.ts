@@ -67,6 +67,16 @@ export function sparseStrict<T>(array: ReadonlyArray<T | null | undefined>): T[]
   return array.filter(it => it != null) as T[]
 }
 
+export function filterAndRemove<T>(array: T[], predicate: (item: T) => boolean): T[] {
+  const result: T[] = []
+  for (let i = array.length - 1; i >= 0; i--) {
+    if (predicate(array[i])) {
+      result.push(...array.splice(i, 1))
+    }
+  }
+  return result
+}
+
 /**
  * Given M arrays with N items, returns a new array which contains all combinations of the
  * input array.
