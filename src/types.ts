@@ -1,7 +1,7 @@
 export type AnyFunction = (...args: any[]) => any
-export type Constructor<T, A extends any[] = any[]> = new (...args: A) => T
+export type Constructor<T extends object, A extends any[] = any[]> = new (...args: A) => T
 export type AbstractConstructor<T, A extends any[] = any[]> = abstract new (...args: A) => T
-export type AnyConstructor = Constructor<unknown>
+export type AnyConstructor = Constructor<object>
 export type ConstructorParams<C extends AnyConstructor> = C extends new (...args: infer A) => void ? A : never
 
 type _FixedArray<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _FixedArray<T, N, [T, ...R]>

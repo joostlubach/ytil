@@ -1,4 +1,4 @@
-import { AbstractConstructor, AnyConstructor, Constructor } from './types'
+import { type AbstractConstructor, type AnyConstructor, type Constructor } from './types'
 
 export function resolveConstructor(arg: any) {
   if (typeof arg === 'function' && arg.prototype != null) {
@@ -17,8 +17,8 @@ export function superConstructor(ctor: AnyConstructor) {
 }
 
 export function createConstructorWithName<T extends Constructor<any>>(name: string, superConstructor?: T): T
-export function createConstructorWithName<T>(name: string, superConstructor: Constructor<T> | AbstractConstructor<T>): Constructor<T>
-export function createConstructorWithName<T>(name: string): Constructor<unknown>
+export function createConstructorWithName<T extends object>(name: string, superConstructor: Constructor<T> | AbstractConstructor<T>): Constructor<T>
+export function createConstructorWithName<T>(name: string): Constructor<object>
 export function createConstructorWithName(name: string, superConstructor?: Constructor<any> | AbstractConstructor<any>): Constructor<any> {
   // Yay I came up with a trick to create a class with a run-time name.
   // Assign the class to some object with the given name as key. Then extract it again and lo and behold, it
