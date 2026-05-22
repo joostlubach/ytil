@@ -1,4 +1,4 @@
-import { AnyFunction } from './types'
+import { type AnyFunction } from './types'
 
 export function isFunction<F extends(...args: any[]) => any>(value: any): value is F {
   return typeof value === 'function'
@@ -8,7 +8,7 @@ export function hasMethod<T, K extends string>(
   receiver: T,
   name: K,
   length?: number,
-): receiver is T & Record<K, () => unknown> {
+): receiver is T & Record<K, (...args: any[]) => unknown> {
   if (receiver == null || typeof receiver !== 'object') {
     return false
   }

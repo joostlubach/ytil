@@ -1,5 +1,5 @@
 import { range } from 'lodash'
-import { Point, Rect } from './geometry'
+import { type Point, type Rect } from './geometry'
 import { objectKeys, objectValues } from './lodashext'
 
 export interface SVGPathOptions {

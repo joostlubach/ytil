@@ -1,6 +1,6 @@
 import { isArray, isEqual, mapKeys, mapValues, omitBy } from 'lodash'
 import { isObject, isPlainObject, objectEntries, objectKeys } from './lodashext'
-import { ObjectKey, UnknownObject } from './types'
+import { type ObjectKey, type UnknownObject } from './types'
 
 export function emptyObject() {
   return {}
