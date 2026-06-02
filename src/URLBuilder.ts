@@ -7,7 +7,7 @@ export namespace URLBuilder {
       if (path != null) {
         url.pathname = `${base.pathname.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`
       }
-      return url.href
+      return url.href.replace(/\/+$/, '')
     }
   }
 }
