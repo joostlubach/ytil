@@ -22,6 +22,13 @@ export function isEmail(email: string) {
   return regexps.email.test(email)
 }
 
+export function ensureHTTPS(url: string): string {
+  if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(url)) {
+    return 'https://' + url
+  }
+  return url
+}
+
 
 export const regexps = {
   url:      /^https?:\/\/(.*?)(?::(\d+))?(.*?)?(\?.*?)?(#.*?)?$/,
