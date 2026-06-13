@@ -96,7 +96,7 @@ export function truncate(text: string, length: number, options: TruncateOptions 
     break
   }
 
-  return text.slice(0, lengthStart) + ellipsis + text.slice(-lengthEnd)
+  return text.slice(0, lengthStart) + ellipsis + (lengthEnd === 0 ? '' : text.slice(-lengthEnd))
 }
 
 export interface TruncateOptions {
