@@ -57,6 +57,26 @@ export function rename<O extends object, K1 extends keyof O, K2 extends ObjectKe
 }
 
 // ------
+// walkObject
+
+export function walkObject(obj: object, fn: (value: unknown, keyPath: ObjectKey[]) => void | false): void {
+  const walk = (value: unknown, keyPath: ObjectKey[]): void => {
+    if (fn(value, keyPath) === false) { return }
+
+    if (isArray(value)) {
+      for (const [index, item] of (value as any[]).entries()) {
+        walk(item, [...keyPath, index])
+      }
+    } else if (isPlainObject(value)) {
+      for (const [key, item] of objectEntries(value)) {
+        walk(item, [...keyPath, key])
+      }
+    }
+  }
+  walk(obj, [])
+}
+
+// ------
 // modifyObject
 
 export function modifyObject<T extends object>(root: T, path: string, modifier: (value: unknown) => unknown): T
