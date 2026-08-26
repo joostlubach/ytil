@@ -3,7 +3,7 @@
 export function ms(input: MsInput): number {
   if (typeof input === 'number') { return input }
 
-  const match = REGEXP.exec(input.trim())
+  const match = MS_INPUT_REGEXP.exec(input.trim())
   if (match == null) {
     throw new Error(`Invalid time format: ${input}`)
   }
@@ -13,13 +13,14 @@ export function ms(input: MsInput): number {
 }
 
 const units = {
-  s: 1000,
-  m: 1000 * 60,
-  h: 1000 * 60 * 60,
-  d: 1000 * 60 * 60 * 24,
-  w: 1000 * 60 * 60 * 24 * 7,
+  ms: 1,
+  s:  1000,
+  m:  1000 * 60,
+  h:  1000 * 60 * 60,
+  d:  1000 * 60 * 60 * 24,
+  w:  1000 * 60 * 60 * 24 * 7,
 }
 
-const REGEXP = /^(-?(?:\d+)?\.?\d+)\s*(s|m|h|d|w)?$/i
+export const MS_INPUT_REGEXP = /^(-?(?:\d+)?\.?\d+)\s*(ms|s|m|h|d|w)?$/i
 
 export type MsInput = `${number}${keyof typeof units}` | number
