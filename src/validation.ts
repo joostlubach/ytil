@@ -35,6 +35,6 @@ export const regexps = {
   fileURL:  /^file:\/\//i,
   httpURL:  /^https?:\/\//i,
   imageURL: /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)(\?.*?)?(#.*?)?$/i,
-  uri:      /^\w+:/,
+  uri:      /^[a-z][a-z0-9+.-]+:[^\s]+$/,
   email:    /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
 }
