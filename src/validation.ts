@@ -1,5 +1,19 @@
-export function isURL(url: string) {
-  return regexps.url.test(url)
+export function isURL(url: string, strict: boolean = true) {
+  if (strict) {
+    return regexps.urlStrict.test(url)
+  } else {
+    return regexps.urlLoose.test(url)
+  }
+}
+
+export function coerceURL(url: string) {
+  if (regexps.urlStrict.test(url)) {
+    return url
+  } else if (regexps.urlLoose.test(url)) {
+    return `https://${url}`
+  } else {
+    return null
+  }
 }
 
 export function isFileURL(url: string) {
@@ -31,10 +45,11 @@ export function ensureHTTPS(url: string): string {
 
 
 export const regexps = {
-  url:      /^https?:\/\/(.*?)(?::(\d+))?(.*?)?(\?.*?)?(#.*?)?$/,
-  fileURL:  /^file:\/\//i,
-  httpURL:  /^https?:\/\//i,
-  imageURL: /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)(\?.*?)?(#.*?)?$/i,
-  uri:      /^[a-z][a-z0-9+.-]+:[^\s]+$/,
-  email:    /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  urlStrict: /^https?:\/\/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(?::(\d+))?(\/.*?)?(\?.*?)?(#.*?)?$/i,
+  urlLoose:  /^(?:https?:\/\/)?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(?::(\d+))?(\/.*?)?(\?.*?)?(#.*?)?$/i,
+  fileURL:   /^file:\/\//i,
+  httpURL:   /^https?:\/\//i,
+  imageURL:  /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)(\?.*?)?(#.*?)?$/i,
+  uri:       /^[a-z][a-z0-9+.-]+:[^\s]+$/,
+  email:     /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
 }
