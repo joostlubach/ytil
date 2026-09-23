@@ -4,8 +4,8 @@ export function isFunction<F extends(...args: any[]) => any>(value: any): value 
   return typeof value === 'function'
 }
 
-export function ctor<C extends AnyConstructor>(obj: InstanceType<C>): C
 export function ctor<O extends object>(obj: O): Constructor<O>
+export function ctor<C extends AnyConstructor>(obj: InstanceType<C>): C
 export function ctor(obj: object) {
   return obj.constructor
 }
