@@ -1,11 +1,11 @@
-import { AnyFunction, Constructor } from './types'
+import { AnyConstructor, AnyFunction } from './types'
 
 export function isFunction<F extends(...args: any[]) => any>(value: any): value is F {
   return typeof value === 'function'
 }
 
-export function ctor<T extends object>(obj: T): Constructor<T> {
-  return obj.constructor as Constructor<T>
+export function ctor<C extends AnyConstructor>(obj: InstanceType<C>): C {
+  return obj.constructor as C
 }
 
 export function hasMethod<T, K extends string>(
