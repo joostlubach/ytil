@@ -57,6 +57,14 @@ export abstract class EnumUtil {
     }
   }
 
+  public static safeCoerce<E extends AnyEnumType>(Enum: E, value: unknown): EnumValue<E> | null {
+    if (this.values(Enum).includes(value as EnumValue<E>)) {
+      return value as EnumValue<E>
+    } else {
+      return null
+    }
+  }
+
   private static entries(Enum: AnyEnumType): Array<[string, string | number]> {
     return Object.entries(Enum).filter((entry): entry is [string, string | number] => (
       typeof entry[1] !== 'function'
