@@ -47,6 +47,7 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
     return true
   }
 
+  const bound = new Set<string | symbol>()
   let current = obj
 
   while (current != null && current !== Object.prototype) {
@@ -57,6 +58,7 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
     
     for (const key of keys) {
       if (!isIncluded(key)) { continue }
+      if (bound.has(key)) { continue }
 
       const prop = Object.getOwnPropertyDescriptor(current, key)
       if (prop == null) { continue }
@@ -67,6 +69,7 @@ export function bindMethods<O extends object>(obj: O, options: BindMethodOptions
         value: prop.value.bind(obj),
         enumerable,
       })
+      bound.add(key)
     }
 
     if (options.recurse === false && current !== obj) { break }
